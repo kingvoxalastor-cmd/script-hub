@@ -5,334 +5,389 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIPT HUB - ONLINE</title>
     <style>
-        :root {
-            --bg-dark: #0a0a0c;
-            --card-bg: #121216;
-            --border-red: #ff2e4d;
-            --red-glow: rgba(255, 46, 77, 0.25);
-            --text-main: #f1f5f9;
-            --text-sub: #94a3b8;
-            --btn-green: #22c55e;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            padding: 20px 15px;
-            max-width: 800px;
-            margin: 0 auto;
-            min-height: 100vh;
-        }
-
-        .header-bar {
+            background-color: #0f0f12;
+            color: #f1f1f1;
+            padding: 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 46, 77, 0.3);
+            justify-content: center;
         }
 
-        h1 { font-size: 1.8rem; font-weight: 800; color: #fff; }
-        h1 span { color: var(--border-red); }
+        .container {
+            width: 100%;
+            max-width: 650px;
+        }
 
-        .btn-pass {
-            background: rgba(255, 46, 77, 0.1);
-            border: 1px solid var(--border-red);
-            color: var(--border-red);
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e50914;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .header span {
+            color: #e50914;
+            font-weight: bold;
         }
 
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid rgba(255, 46, 77, 0.3);
+            background: #18181c;
+            border: 1px solid #282830;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #ffffff;
+            border-left: 4px solid #e50914;
+            padding-left: 10px;
         }
 
-        .section-title::before {
-            content: '';
-            width: 4px; height: 18px;
-            background-color: var(--border-red);
-            border-radius: 2px;
+        .form-group {
+            margin-bottom: 15px;
         }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-sub); }
-
-        input[type="text"], input[type="file"], textarea {
-            width: 100%; padding: 12px;
-            border: 1px solid #2a2a35; border-radius: 8px;
-            background-color: #050507; color: #fff;
-            font-size: 0.95rem; outline: none;
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaaaaa;
+            font-size: 14px;
         }
 
-        input[type="file"] {
-            padding: 8px;
-            cursor: pointer;
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            background: #0f0f12;
+            border: 1px solid #33333e;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
         }
 
         input[type="text"]:focus, textarea:focus {
-            border-color: var(--border-red);
-            box-shadow: 0 0 8px var(--red-glow);
+            border-color: #e50914;
         }
 
-        textarea { resize: vertical; min-height: 100px; font-family: monospace; }
-
-        .btn-submit {
-            width: 100%; padding: 12px;
-            background: var(--border-red); color: #fff;
-            border: none; border-radius: 8px;
-            font-size: 1rem; font-weight: 700; cursor: pointer;
-            box-shadow: 0 0 15px var(--red-glow);
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: monospace;
         }
 
-        .script-list { display: flex; flex-direction: column; gap: 15px; }
+        input[type="file"] {
+            background: #0f0f12;
+            padding: 8px;
+            border-radius: 8px;
+            width: 100%;
+            color: #aaa;
+            border: 1px dashed #33333e;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #e50914;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #b20710;
+        }
+
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
 
         .script-item {
-            background-color: var(--card-bg);
-            border: 1px solid #1f1f28;
-            border-left: 4px solid var(--border-red);
-            border-radius: 10px; padding: 16px;
+            background: #18181c;
+            border: 1px solid #282830;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
         }
 
         .script-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        .script-title { font-size: 1.05rem; font-weight: 700; color: #fff; }
-        .action-btns { display: flex; gap: 8px; }
-
-        .btn-act {
-            padding: 6px 12px; border-radius: 6px; border: none;
-            cursor: pointer; font-size: 0.8rem; font-weight: 600;
+        .script-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
         }
-
-        .btn-copy { background: rgba(34, 197, 94, 0.15); color: var(--btn-green); border: 1px solid rgba(34, 197, 94, 0.3); }
-        .btn-delete { background: rgba(255, 46, 77, 0.15); color: var(--border-red); border: 1px solid rgba(255, 46, 77, 0.3); }
 
         .script-img {
             width: 100%;
             max-height: 300px;
             object-fit: cover;
             border-radius: 8px;
-            margin-bottom: 12px;
-            border: 1px solid #2a2a35;
+            margin-bottom: 10px;
         }
 
-        .script-code {
-            background-color: #050507; padding: 12px; border-radius: 6px;
-            font-family: monospace; white-space: pre-wrap; word-break: break-all;
-            color: #e2e8f0; max-height: 180px; overflow-y: auto; font-size: 0.85rem;
+        .code-box {
+            background: #09090b;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #00ff66;
+            word-break: break-all;
+            position: relative;
+            margin-bottom: 10px;
+            max-height: 120px;
+            overflow-y: auto;
         }
 
-        .empty-box { text-align: center; color: var(--text-sub); padding: 30px; }
+        .btn-copy {
+            background: #282830;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn-copy:hover {
+            background: #383845;
+        }
+
+        .empty-text {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header-bar">
+<div class="container">
+    <div class="header">
         <h1>SCRIPT <span>HUB</span></h1>
-        <button class="btn-pass" onclick="changeOwnerPassword()">⚙ ตั้งรหัสผ่านลบ</button>
+        <small style="color:#888;">ออนไลน์ ☁️</small>
     </div>
 
+    <!-- โซนเพิ่มสคริปต์ -->
     <div class="card">
-        <div class="section-title">เพิ่มผลงานสคริปต์ (ออนไลน์)</div>
-        <form id="scriptForm">
-            <div class="form-group">
-                <label for="title">ชื่อสคริปต์</label>
-                <input type="text" id="title" placeholder="ใส่ชื่อสคริปต์..." required>
-            </div>
-            <div class="form-group">
-                <label for="imgFile">เลือกรูปภาพผลงานจากในเครื่อง (ใส่หรือไม่ใส่ก็ได้)</label>
-                <input type="file" id="imgFile" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label for="code">ตัวสคริปต์ (Source Code)</label>
-                <textarea id="code" placeholder="วางโค้ดสคริปต์..." required></textarea>
-            </div>
-            <button type="submit" class="btn-submit" id="submitBtn">ลงผลงาน</button>
-        </form>
+        <div class="card-title">เพิ่มผลงานสคริปต์</div>
+        <div class="form-group">
+            <label>ชื่อสคริปต์</label>
+            <input type="text" id="scriptTitle" placeholder="ใส่ชื่อสคริปต์..." required>
+        </div>
+        <div class="form-group">
+            <label>เลือกรูปภาพตัวอย่างจากในเครื่อง (ใส่หรือไม่ใส่ก็ได้)</label>
+            <input type="file" id="scriptImage" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>ตัวสคริปต์ (Source Code)</label>
+            <textarea id="scriptCode" placeholder="วางโค้ดสคริปต์..." required></textarea>
+        </div>
+        <button class="btn" id="submitBtn" onclick="addScript()">ลงผลงาน</button>
     </div>
 
-    <div class="section-title">รายการสคริปต์ทั้งหมดในระบบ</div>
-    <div id="scriptList" class="script-list">
-        <div class="card empty-box">กำลังโหลดข้อมูล...</div>
+    <!-- โซนแสดงสคริปต์ทั้งหมด -->
+    <div class="card-title">รายการสคริปต์ทั้งหมดในระบบ</div>
+    <div id="scriptList">
+        <div class="empty-text">กำลังโหลดข้อมูลสคริปต์...</div>
     </div>
+</div>
 
-    <script>
-        // ⚠️ ใส่ BIN ID และ MASTER KEY จาก jsonbin.io ตรงนี้ครับ
-        const BIN_ID = "ใส่_BIN_ID_ตรงนี้";
-        const MASTER_KEY = "ใส่_MASTER_KEY_ตรงนี้";
+<script>
+    // การตั้งค่า JSONBin.io
+    const BIN_ID = '6ac4fd7eac6210605a193eb2';
+    const MASTER_KEY = '$2a$10$c050I32SC1yvzC7XK5SW1e-q3X3bW7I';
+    const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-        let scriptsData = [];
-        let ownerPassword = localStorage.getItem('redOwnerPass') || "1234";
+    let scriptsData = [];
 
-        function changeOwnerPassword() {
-            const currentPass = prompt("กรุณากรอกรหัสผ่านปัจจุบัน (ค่าเริ่มต้นคือ 1234):");
-            if (currentPass === ownerPassword) {
-                const newPass = prompt("ตั้งรหัสผ่านเจ้าของใหม่:");
-                if (newPass && newPass.trim() !== "") {
-                    ownerPassword = newPass.trim();
-                    localStorage.setItem('redOwnerPass', ownerPassword);
-                    alert("เปลี่ยนรหัสผ่านเจ้าของเรียบร้อยแล้ว!");
-                }
-            } else if (currentPass !== null) {
-                alert("รหัสผ่านไม่ถูกต้อง!");
+    // ดึงข้อมูลเมื่อโหลดหน้าเว็บ
+    window.onload = function() {
+        fetchScripts();
+    };
+
+    // ฟังก์ชันดึงข้อมูลสคริปต์จาก JSONBin
+    function fetchScripts() {
+        fetch(API_URL, {
+            method: 'GET',
+            headers: {
+                'X-Master-Key': MASTER_KEY,
+                'X-Bin-Meta': 'false'
             }
-        }
-
-        function loadScripts() {
-            fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                headers: { 'X-Master-Key': MASTER_KEY }
-            })
-            .then(res => res.json())
-            .then(data => {
-                scriptsData = data.record || [];
-                renderScripts();
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('scriptList').innerHTML = '<div class="card empty-box">โหลดข้อมูลไม่สำเร็จ ตรวจสอบ BIN ID / Key</div>';
-            });
-        }
-
-        function saveScriptsOnline(alertText) {
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = "กำลังบันทึก...";
-            btn.disabled = true;
-
-            fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': MASTER_KEY
-                },
-                body: JSON.stringify(scriptsData)
-            })
-            .then(res => res.json())
-            .then(() => {
-                btn.innerText = "ลงผลงาน";
-                btn.disabled = false;
-                alert(alertText);
-                renderScripts();
-            })
-            .catch(err => {
-                alert("เกิดข้อผิดพลาดในการบันทึก");
-                btn.innerText = "ลงผลงาน";
-                btn.disabled = false;
-            });
-        }
-
-        function renderScripts() {
-            const list = document.getElementById('scriptList');
-            list.innerHTML = '';
-
-            if (scriptsData.length === 0) {
-                list.innerHTML = '<div class="card empty-box">ยังไม่มีผลงานสคริปต์ในระบบ</div>';
-                return;
-            }
-
-            scriptsData.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'script-item';
-                
-                const imgHTML = item.imgData ? `<img src="${item.imgData}" class="script-img">` : '';
-
-                div.innerHTML = `
-                    <div class="script-header">
-                        <div class="script-title">${cleanHTML(item.title)}</div>
-                        <div class="action-btns">
-                            <button class="btn-act btn-copy" onclick="copyCode(${index})">📋 คัดลอก</button>
-                            <button class="btn-act btn-delete" onclick="deleteScript(${index})">🗑️ ลบ</button>
-                        </div>
-                    </div>
-                    ${imgHTML}
-                    <div class="script-code">${cleanHTML(item.code)}</div>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function cleanHTML(str) {
-            return str ? str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)) : '';
-        }
-
-        // แปลงไฟล์รูปภาพในเครื่องเป็น Base64 Data String
-        function processAndSave(title, code, file) {
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imgData = e.target.result;
-                    scriptsData.unshift({ title, imgData, code });
-                    saveScriptsOnline('ลงผลงานพร้อมรูปภาพสำเร็จ!');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                scriptsData.unshift({ title, imgData: null, code });
-                saveScriptsOnline('ลงผลงานสำเร็จ!');
-            }
-        }
-
-        document.getElementById('scriptForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const title = document.getElementById('title').value;
-            const code = document.getElementById('code').value;
-            const fileInput = document.getElementById('imgFile');
-            const file = fileInput.files[0];
-
-            processAndSave(title, code, file);
-            
-            document.getElementById('title').value = '';
-            document.getElementById('code').value = '';
-            fileInput.value = '';
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลได้');
+            return response.json();
+        })
+        .then(data => {
+            scriptsData = Array.isArray(data) ? data : [];
+            renderScripts();
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('scriptList').innerHTML = '<div class="empty-text" style="color:#e50914;">เกิดข้อผิดพลาดในการดึงข้อมูล</div>';
         });
+    }
 
-        function copyCode(index) {
-            navigator.clipboard.writeText(scriptsData[index].code).then(() => {
-                alert('คัดลอกสคริปต์เรียบร้อยแล้ว!');
-            });
+    // ฟังก์ชันบันทึกข้อมูลสคริปต์
+    function addScript() {
+        const title = document.getElementById('scriptTitle').value.trim();
+        const code = document.getElementById('scriptCode').value.trim();
+        const imageInput = document.getElementById('scriptImage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (!title || !code) {
+            alert('กรุณากรอกชื่อสคริปต์และโค้ดสคริปต์ให้ครบถ้วน');
+            return;
         }
 
-        function deleteScript(index) {
-            const inputPass = prompt("🔒 ใส่รหัสผ่านเจ้าของเพื่อลบสคริปต์:");
-            if (inputPass === ownerPassword) {
-                scriptsData.splice(index, 1);
-                saveScriptsOnline('ลบสคริปต์เรียบร้อยแล้ว!');
-            } else if (inputPass !== null) {
-                alert("❌ รหัสผ่านไม่ถูกต้อง!");
-            }
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'กำลังบันทึกข้อมูล...';
+
+        if (imageInput.files && imageInput.files[0]) {
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const imgBase64 = e.target.result;
+                saveToCloud(title, code, imgBase64);
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            saveToCloud(title, code, null);
+        }
+    }
+
+    // ฟังก์ชันส่งข้อมูลไปยัง JSONBin
+    function saveToCloud(title, code, imageBase64) {
+        const newScript = {
+            id: Date.now(),
+            title: title,
+            code: code,
+            image: imageBase64,
+            date: new Date().toLocaleDateString('th-TH')
+        };
+
+        scriptsData.unshift(newScript);
+
+        fetch(API_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': MASTER_KEY
+            },
+            body: JSON.stringify(scriptsData)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('บันทึกไม่สำเร็จ');
+            return response.json();
+        })
+        .then(data => {
+            alert('ลงผลงานสำเร็จเรียบร้อยแล้ว!');
+            document.getElementById('scriptTitle').value = '';
+            document.getElementById('scriptCode').value = '';
+            document.getElementById('scriptImage').value = '';
+            renderScripts();
+        })
+        .catch(err => {
+            console.error(err);
+            alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            scriptsData.shift(); // ลบรายการล่าสุดออกหากบันทึกไม่สำเร็จ
+        })
+        .finally(() => {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'ลงผลงาน';
+        });
+    }
+
+    // ฟังก์ชันแสดงรายการสคริปต์บนหน้าเว็บ
+    function renderScripts() {
+        const listDiv = document.getElementById('scriptList');
+        listDiv.innerHTML = '';
+
+        if (scriptsData.length === 0) {
+            listDiv.innerHTML = '<div class="empty-text">ยังไม่มีผลงานสคริปต์ในระบบ</div>';
+            return;
         }
 
-        loadScripts();
-    </script>
+        scriptsData.forEach(item => {
+            const scriptCard = document.createElement('div');
+            scriptCard.className = 'script-item';
+
+            let imgHtml = item.image ? `<img src="${item.image}" class="script-img" alt="รูปตัวอย่าง">` : '';
+
+            scriptCard.innerHTML = `
+                <div class="script-header">
+                    <div class="script-title">${escapeHtml(item.title)}</div>
+                    <small style="color:#666;">${item.date || ''}</small>
+                </div>
+                ${imgHtml}
+                <div class="code-box">${escapeHtml(item.code)}</div>
+                <button class="btn-copy" onclick="copyCode(this, \`${escapeHtml(item.code)}\`)">คัดลอกโค้ด</button>
+            `;
+
+            listDiv.appendChild(scriptCard);
+        });
+    }
+
+    // ฟังก์ชันคัดลอกโค้ด
+    function copyCode(btn, codeText) {
+        navigator.clipboard.writeText(codeText).then(() => {
+            const originalText = btn.innerText;
+            btn.innerText = 'คัดลอกแล้ว!';
+            btn.style.background = '#00ff66';
+            btn.style.color = '#000';
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = '#282830';
+                btn.style.color = '#fff';
+            }, 2000);
+        });
+    }
+
+    // ฟังก์ชันป้องกัน XSS
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
+
 </body>
 </html>
-     <script>
-        // ⚠️ ใส่ BIN ID และ MASTER KEY จาก jsonbin.io ตรงนี้ครับ
-        const BIN_ID = "6ac4fd7eac6210605a193eb2";
-        const MASTER_KEY = "$2a$10$ecvjzzTvc7XkSLw9/7L2gukhIW/w4H.PRNViTUYJoDHgaMRT1Qo.q";
-
-        let scriptsData = [];
-        let ownerPassword = localStorage.getItem('redOwnerPass') || "1234";
-
-
