@@ -74,59 +74,6 @@
             padding: 20px 14px;
         }
 
-        /* Auth Screen Modal */
-        .auth-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 200;
-            padding: 20px;
-        }
-
-        .auth-card {
-            background: #121212;
-            border: 1px solid #ff003c;
-            width: 100%;
-            max-width: 380px;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 0 25px rgba(255,0,60,0.2);
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #222;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 10px;
-            background: none;
-            border: none;
-            color: #888;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .auth-tab.active {
-            color: #ff003c;
-            border-bottom: 2px solid #ff003c;
-        }
-
-        .error-msg {
-            color: #ff3355;
-            font-size: 12px;
-            margin-bottom: 10px;
-            display: none;
-            text-align: center;
-            font-weight: 600;
-        }
-
         .header {
             display: flex;
             align-items: center;
@@ -141,13 +88,44 @@
 
         .header h1 span { color: #ff003c; }
 
-        .user-tag {
-            font-size: 12px;
+        /* Secret Admin Trigger Button */
+        .secret-admin-btn {
             background: #1a1a1a;
-            padding: 4px 10px;
-            border-radius: 20px;
             border: 1px solid #333;
-            color: #aaa;
+            color: #555;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .secret-admin-btn:hover {
+            color: #ff003c;
+            border-color: #ff003c;
+        }
+
+        /* Admin Secret Password Modal */
+        .admin-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+            padding: 20px;
+        }
+
+        .admin-modal-card {
+            background: #121212;
+            border: 1px solid #ff003c;
+            width: 100%;
+            max-width: 320px;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+            text-align: center;
         }
 
         /* Search Box */
@@ -207,7 +185,7 @@
         }
 
         /* Forms & Inputs */
-        .form-group { margin-bottom: 12px; }
+        .form-group { margin-bottom: 12px; text-align: left; }
 
         label {
             display: block;
@@ -236,7 +214,7 @@
             border-radius: 8px;
             font-weight: 800;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         /* Addon List & Cards */
@@ -322,6 +300,7 @@
             left: 10px;
             display: flex;
             gap: 6px;
+            z-index: 10;
         }
 
         .admin-btn {
@@ -365,55 +344,34 @@
         <!-- Header -->
         <div class="header">
             <h1>ADDON<span>HUB</span></h1>
-            <div class="user-tag" id="userTag">ผู้ใช้ทั่วไป</div>
+            <!-- Secret Admin Button -->
+            <button class="secret-admin-btn" id="adminStatusBtn" onclick="openAdminModal()"><i class="fa-solid fa-lock"></i> Admin Access</button>
         </div>
 
-        <!-- AUTH MODAL -->
-        <div class="auth-overlay" id="authModal">
-            <div class="auth-card">
-                <div class="auth-tabs">
-                    <button class="auth-tab active" id="tabLogin" onclick="setAuthTab('login')">ลงชื่อเข้าใช้</button>
-                    <button class="auth-tab" id="tabRegister" onclick="setAuthTab('register')">สมัครสมาชิก</button>
+        <!-- ADMIN PASSWORD POPUP MODAL -->
+        <div class="admin-modal-overlay" id="adminModal">
+            <div class="admin-modal-card">
+                <h3 style="color: #ff003c; font-size: 16px; margin-bottom: 12px;"><i class="fa-solid fa-user-shield"></i> ยืนยันสิทธิ์ Admin</h3>
+                <div class="form-group">
+                    <label>ป้อนรหัสผ่านเพื่อเข้าสู่ระบบแอดมิน</label>
+                    <input type="password" id="adminPassInput" placeholder="กรอกรหัสผ่านที่นี่...">
                 </div>
-
-                <!-- Error Message Alert Box -->
-                <div class="error-msg" id="authError"></div>
-
-                <!-- Login Form -->
-                <div id="loginForm">
-                    <div class="form-group">
-                        <label>ชื่อผู้ใช้ (Username)</label>
-                        <input type="text" id="loginUsername" placeholder="กรอกชื่อผู้ใช้">
-                    </div>
-                    <div class="form-group">
-                        <label>รหัสผ่าน (Password)</label>
-                        <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน">
-                    </div>
-                    <button class="btn-primary" onclick="handleLogin()">เข้าสู่ระบบ</button>
-                </div>
-
-                <!-- Register Form -->
-                <div id="registerForm" style="display: none;">
-                    <div class="form-group">
-                        <label>ตั้งชื่อผู้ใช้ (Username)</label>
-                        <input type="text" id="regUsername" placeholder="ตั้งชื่อผู้ใช้ของคุณ">
-                    </div>
-                    <div class="form-group">
-                        <label>ตั้งรหัสผ่าน (Password)</label>
-                        <input type="password" id="regPassword" placeholder="ตั้งรหัสผ่าน">
-                    </div>
-                    <button class="btn-primary" onclick="handleRegister()">สร้างบัญชี</button>
-                </div>
+                <button class="btn-primary" onclick="verifyAdminKey()">ตกลง</button>
+                <button style="background: none; border: none; color: #888; font-size: 12px; margin-top: 10px; cursor: pointer;" onclick="closeAdminModal()">ยกเลิก</button>
             </div>
         </div>
 
         <!-- PAGE 1: HOME -->
         <div class="page-section active" id="pageHome">
+            <!-- ADMIN CONTROL PANEL (จะแสดงเมื่อล็อกอินแอดมินผ่าน) -->
             <div id="adminPanel" style="display: none; background: #121212; border: 1px solid #ff003c; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-                <h3 style="color: #ff003c; font-size: 14px; margin-bottom: 12px;">⚡ ADMIN CONTROL PANEL</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="color: #ff003c; font-size: 14px;">⚡ ADMIN CONTROL PANEL</h3>
+                    <button onclick="logoutAdmin()" style="background: #333; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer;">ออกจากแอดมิน</button>
+                </div>
                 <div style="display: flex; gap: 6px; margin-bottom: 14px;">
-                    <input type="text" id="newCatInput" placeholder="+ หมวดหมู่ใหม่..." style="flex: 1;">
-                    <button onclick="addCategory()" style="background: #333; color: #fff; border: none; padding: 0 12px; border-radius: 6px; font-weight: 700;">เพิ่ม</button>
+                    <input type="text" id="newCatInput" placeholder="+ เพิ่มหมวดหมู่ใหม่..." style="flex: 1;">
+                    <button onclick="addCategory()" style="background: #333; color: #fff; border: none; padding: 0 12px; border-radius: 6px; font-weight: 700; cursor: pointer;">เพิ่ม</button>
                 </div>
                 <div class="form-group"><label>ชื่อแอดออน</label><input type="text" id="addonTitle"></div>
                 <div class="form-group">
@@ -444,12 +402,11 @@
             <div class="addon-grid" id="favoritesList"></div>
         </div>
 
-        <!-- PAGE 4: SETTINGS / ACCOUNT -->
+        <!-- PAGE 4: SETTINGS / ABOUT -->
         <div class="page-section" id="pageSettings">
             <div style="background: #121212; padding: 20px; border-radius: 12px; border: 1px solid #222;">
-                <h3 style="margin-bottom: 10px;">บัญชีของคุณ</h3>
-                <p style="color: #888; font-size: 13px; margin-bottom: 16px;" id="accountName">Username: -</p>
-                <button onclick="logout()" style="background: #ff003c; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer;">ออกจากระบบ</button>
+                <h3 style="margin-bottom: 8px;">ADDON HUB v2.0</h3>
+                <p style="color: #888; font-size: 13px;">ศูนย์รวมแอดออน Minecraft PE และ Bedrock Edition</p>
             </div>
         </div>
 
@@ -465,34 +422,78 @@
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
     let appData = {
-        users: [],
         categories: ['ADD-ONS', 'WORLD', 'SKINS', 'TEXTURES'],
         addons: [],
         visitors: 102
     };
 
-    let currentUser = null;
+    let isAdmin = false;
     let selectedCat = 'ALL';
     let editingAddonId = null;
     let userFavorites = JSON.parse(localStorage.getItem('myFavorites') || '[]');
 
     window.onload = function() {
-        checkLoginSession();
+        checkAdminSession();
         renderCategories();
         renderAddons();
         loadCloudData();
     };
 
-    function showError(msg) {
-        const errBox = document.getElementById('authError');
-        errBox.innerText = msg;
-        errBox.style.display = 'block';
+    function openAdminModal() {
+        if (isAdmin) {
+            alert("คุณเข้าสู่ระบบแอดมินอยู่แล้วครับ");
+            return;
+        }
+        document.getElementById('adminModal').style.display = 'flex';
+        document.getElementById('adminPassInput').focus();
     }
 
-    function clearError() {
-        const errBox = document.getElementById('authError');
-        errBox.innerText = '';
-        errBox.style.display = 'none';
+    function closeAdminModal() {
+        document.getElementById('adminModal').style.display = 'none';
+        document.getElementById('adminPassInput').value = '';
+    }
+
+    function verifyAdminKey() {
+        const pass = document.getElementById('adminPassInput').value.trim();
+        if (pass === "elite.1190") {
+            isAdmin = true;
+            localStorage.setItem('isAdmin', 'true');
+            closeAdminModal();
+            updateAdminUI();
+            alert("ยินดีต้อนรับ Admin!");
+        } else {
+            alert("รหัสผ่านไม่ถูกต้อง!");
+        }
+    }
+
+    function checkAdminSession() {
+        if (localStorage.getItem('isAdmin') === 'true') {
+            isAdmin = true;
+        }
+        updateAdminUI();
+    }
+
+    function updateAdminUI() {
+        const btn = document.getElementById('adminStatusBtn');
+        const panel = document.getElementById('adminPanel');
+
+        if (isAdmin) {
+            btn.innerHTML = '<i class="fa-solid fa-user-shield" style="color:#ff003c;"></i> Admin Active';
+            btn.style.borderColor = '#ff003c';
+            panel.style.display = 'block';
+        } else {
+            btn.innerHTML = '<i class="fa-solid fa-lock"></i> Admin Access';
+            btn.style.borderColor = '#333';
+            panel.style.display = 'none';
+        }
+        renderAddons();
+    }
+
+    function logoutAdmin() {
+        isAdmin = false;
+        localStorage.removeItem('isAdmin');
+        updateAdminUI();
+        alert("ออกจากสิทธิ์ Admin เรียบร้อย");
     }
 
     async function loadCloudData() {
@@ -525,88 +526,77 @@
         }
     }
 
-    function checkLoginSession() {
-        const saved = localStorage.getItem('currentUser');
-        if (saved) {
-            currentUser = JSON.parse(saved);
-            document.getElementById('authModal').style.display = 'none';
-            document.getElementById('userTag').innerText = currentUser.username;
-            document.getElementById('accountName').innerText = "Username: " + currentUser.username;
-            if (currentUser.isAdmin) {
-                document.getElementById('adminPanel').style.display = 'block';
-            }
-        } else {
-            document.getElementById('authModal').style.display = 'flex';
-        }
-    }
-
-    function setAuthTab(tab) {
-        clearError();
-        document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
-        document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
-        document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
-        document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
-    }
-
-    function handleRegister() {
-        clearError();
-        const u = document.getElementById('regUsername').value.trim();
-        const p = document.getElementById('regPassword').value.trim();
-
-        if (!u || !p) return showError("⚠️ กรุณากรอกข้อมูลให้ครบถ้วน");
-        if (appData.users.some(x => x.username === u) || u === "elite.1190") {
-            return showError("⚠️ ชื่อผู้ใช้นี้ถูกใช้งานแล้ว");
-        }
-
-        const newUser = { username: u, password: p, isAdmin: false };
-        appData.users.push(newUser);
-        syncToCloud();
-        
-        loginUser(newUser);
-        alert("สมัครสมาชิกสำเร็จ!");
-    }
-
-    function handleLogin() {
-        clearError();
-        const u = document.getElementById('loginUsername').value.trim();
-        const p = document.getElementById('loginPassword').value.trim();
-
-        if (!u || !p) return showError("⚠️ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
-
-        // Admin Special Check
-        if (u === "elite.1190" && p === "black.1190") {
-            const adminUser = { username: "elite.1190", isAdmin: true };
-            loginUser(adminUser);
-            return;
-        }
-
-        const found = appData.users.find(x => x.username === u && x.password === p);
-        if (found) {
-            loginUser(found);
-        } else {
-            showError("⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
-        }
-    }
-
-    function loginUser(user) {
-        currentUser = user;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        document.getElementById('authModal').style.display = 'none';
-        document.getElementById('userTag').innerText = user.username;
-        document.getElementById('accountName').innerText = "Username: " + user.username;
-        if (user.isAdmin) document.getElementById('adminPanel').style.display = 'block';
-        renderAddons();
-    }
-
-    function logout() {
-        localStorage.removeItem('currentUser');
-        location.reload();
-    }
-
     function addCategory() {
         const name = document.getElementById('newCatInput').value.trim().toUpperCase();
         if (name && !appData.categories.includes(name)) {
             appData.categories.push(name);
             document.getElementById('newCatInput').value = '';
             syncToCloud();
-         
+            renderCategories();
+        }
+    }
+
+    function renderCategories() {
+        const wrap = document.getElementById('categoryTabs');
+        const select = document.getElementById('addonCatSelect');
+        wrap.innerHTML = `<button class="cat-btn ${selectedCat === 'ALL' ? 'active' : ''}" onclick="filterCat('ALL')">ALL</button>`;
+        select.innerHTML = '';
+
+        if (appData.categories) {
+            appData.categories.forEach(c => {
+                wrap.innerHTML += `<button class="cat-btn ${selectedCat === c ? 'active' : ''}" onclick="filterCat('${c}')">${c}</button>`;
+                select.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+        }
+    }
+
+    function filterCat(cat) {
+        selectedCat = cat;
+        renderCategories();
+        renderAddons();
+    }
+
+    async function saveAddon() {
+        const title = document.getElementById('addonTitle').value.trim();
+        const cat = document.getElementById('addonCatSelect').value;
+        const img = document.getElementById('addonImage').value.trim();
+        const file = document.getElementById('addonFile').value.trim();
+
+        if (!title || !img || !file) return alert("กรอกข้อมูลให้ครบถ้วน");
+
+        if (editingAddonId) {
+            const idx = appData.addons.findIndex(a => a.id === editingAddonId);
+            if (idx !== -1) {
+                appData.addons[idx] = { id: editingAddonId, title, category: cat, image: img, downloadUrl: file };
+            }
+            editingAddonId = null;
+            document.getElementById('addonSubmitBtn').innerText = "POST ADDON";
+        } else {
+            const newAddon = { id: Date.now(), title, category: cat, image: img, downloadUrl: file };
+            if(!appData.addons) appData.addons = [];
+            appData.addons.unshift(newAddon);
+        }
+
+        document.getElementById('addonTitle').value = '';
+        document.getElementById('addonImage').value = '';
+        document.getElementById('addonFile').value = '';
+
+        syncToCloud();
+        renderAddons();
+    }
+
+    function editAddon(id) {
+        const item = appData.addons.find(a => a.id === id);
+        if (!item) return;
+        editingAddonId = id;
+        document.getElementById('addonTitle').value = item.title;
+        document.getElementById('addonCatSelect').value = item.category;
+        document.getElementById('addonImage').value = item.image;
+        document.getElementById('addonFile').value = item.downloadUrl;
+        document.getElementById('addonSubmitBtn').innerText = "UPDATE ADDON";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteAddon(id) {
+        if (confirm("ต้องการลบใช่หรือไม่?")) {
+            appData.addons
