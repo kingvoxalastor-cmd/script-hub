@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADDON HUB - Minecraft Addons</title>
+    <title>ADDON HUB</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -42,9 +42,6 @@
             font-weight: 800;
             letter-spacing: 1px;
             color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .header h1 span {
@@ -56,7 +53,7 @@
             background: #121212;
             border: 1px solid #ff003c;
             color: #ff003c;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             padding: 6px 14px;
@@ -67,22 +64,16 @@
         .admin-toggle-btn:hover {
             background: #ff003c;
             color: #fff;
-            box-shadow: 0 0 12px rgba(255, 0, 60, 0.4);
         }
 
-        /* Admin Login Box (In-page) */
+        /* Admin Login Box (In-page Always Ready) */
         .admin-login-box {
-            display: none;
             background: #121212;
-            border: 1px solid #222;
+            border: 1px solid #ff003c;
             border-radius: 10px;
             padding: 14px;
             margin-bottom: 20px;
-            animation: slideDown 0.2s ease;
-        }
-
-        .admin-login-box.active {
-            display: block;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.15);
         }
 
         .login-row {
@@ -125,16 +116,10 @@
             padding: 18px;
             margin-bottom: 24px;
             box-shadow: 0 4px 25px rgba(255, 0, 60, 0.2);
-            animation: slideDown 0.3s ease;
         }
 
         .admin-card.active {
             display: block;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .card-title {
@@ -189,11 +174,6 @@
             font-size: 13px;
             font-weight: 800;
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-submit:hover {
-            background: #d60032;
         }
 
         .btn-cancel-edit {
@@ -219,11 +199,6 @@
             cursor: pointer;
         }
 
-        .logout-btn:hover {
-            color: #fff;
-            border-color: #ff003c;
-        }
-
         /* Addon Grid Layout */
         .addon-grid {
             display: flex;
@@ -237,12 +212,6 @@
             border-radius: 12px;
             overflow: hidden;
             position: relative;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .addon-card:hover {
-            border-color: #2a2a2a;
-            transform: translateY(-2px);
         }
 
         /* สัดส่วนรูปภาพ 16:9 สไตล์เกมมิ่ง */
@@ -251,7 +220,6 @@
             aspect-ratio: 16 / 9;
             background: #181818;
             overflow: hidden;
-            position: relative;
         }
 
         .addon-img {
@@ -288,13 +256,11 @@
             font-size: 13px;
             border-radius: 8px;
             transition: 0.2s;
-            letter-spacing: 0.5px;
         }
 
         .btn-download:hover {
             background: #ff003c;
             color: #ffffff;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
         }
 
         .empty-text {
@@ -307,7 +273,7 @@
             border: 1px dashed #222;
         }
 
-        /* Admin Control Overlay Buttons */
+        /* Admin Controls */
         .admin-controls {
             display: none;
             position: absolute;
@@ -343,44 +309,24 @@
             font-weight: 800;
         }
 
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 24px;
-            padding-top: 16px;
+        /* Footer Access */
+        .footer-admin {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 15px;
             border-top: 1px solid #1a1a1a;
         }
 
-        .page-btn {
-            background: #121212;
-            color: #ff003c;
-            border: 1px solid #222;
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
+        .footer-admin-btn {
+            background: transparent;
+            color: #444;
+            border: none;
+            font-size: 11px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .page-btn:hover:not(:disabled) {
-            border-color: #ff003c;
-            background: #ff003c;
-            color: #fff;
-        }
-
-        .page-btn:disabled {
-            color: #333;
-            border-color: #121212;
-            cursor: not-allowed;
-        }
-
-        .page-info {
-            font-size: 12px;
-            color: #777;
-            font-weight: 600;
+        .footer-admin-btn:hover {
+            color: #888;
         }
     </style>
 </head>
@@ -390,13 +336,13 @@
     <!-- Header -->
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
-        <button class="admin-toggle-btn" onclick="toggleAdminPanel()">ADMIN</button>
+        <button class="admin-toggle-btn" onclick="showLoginBox()">ADMIN</button>
     </div>
 
-    <!-- Admin Login Input Box -->
+    <!-- Admin Login Input Box (แสดงไว้ให้กรอกได้เลย ไม่ต้องรอกดปุ่ม) -->
     <div class="admin-login-box" id="adminLoginBox">
         <div class="login-row">
-            <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน Admin..." onkeyup="handleKey(event)">
+            <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน Admin เข้าสู่ระบบ..." onkeyup="handleKey(event)">
             <button class="login-btn" onclick="checkPassword()">เข้าสู่ระบบ</button>
         </div>
     </div>
@@ -431,11 +377,9 @@
         <div class="empty-text">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div>
     </div>
 
-    <!-- Pagination -->
-    <div class="pagination" id="paginationControls" style="display: none;">
-        <button class="page-btn" id="prevBtn" onclick="changePage(-1)">&lt; PREV</button>
-        <span class="page-info" id="pageInfo">Page 1 of 1</span>
-        <button class="page-btn" id="nextBtn" onclick="changePage(1)">NEXT &gt;</button>
+    <!-- Footer -->
+    <div class="footer-admin">
+        <button class="footer-admin-btn" onclick="showLoginBox()">[ ADMIN LOGIN ]</button>
     </div>
 </div>
 
@@ -445,28 +389,17 @@
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
     let addonsData = [];
-    let currentPage = 1;
-    const itemsPerPage = 5;
     let editingAddonId = null;
 
     window.onload = function() {
         loadAddons();
     };
 
-    function toggleAdminPanel() {
-        const loginBox = document.getElementById('adminLoginBox');
-        const adminForm = document.getElementById('adminForm');
-
-        if (adminForm.classList.contains('active')) {
-            // ถ้าเข้าสู่ระบบอยู่แล้ว ให้เลื่อนขึ้นไปที่ฟอร์ม
-            adminForm.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            // ถ้ายังไม่เข้าสู่ระบบ เปิด/ปิด ช่องใส่รหัส
-            loginBox.classList.toggle('active');
-            if (loginBox.classList.contains('active')) {
-                document.getElementById('passInput').focus();
-            }
-        }
+    function showLoginBox() {
+        const box = document.getElementById('adminLoginBox');
+        box.style.display = 'block';
+        document.getElementById('passInput').focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function handleKey(e) {
@@ -476,7 +409,7 @@
     function checkPassword() {
         const pass = document.getElementById('passInput').value;
         if (pass === "black.1234") {
-            document.getElementById('adminLoginBox').classList.remove('active');
+            document.getElementById('adminLoginBox').style.display = 'none';
             document.getElementById('adminForm').classList.add('active');
             document.getElementById('mainContainer').classList.add('admin-mode');
             document.getElementById('passInput').value = '';
@@ -489,6 +422,7 @@
     function logoutAdmin() {
         document.getElementById('adminForm').classList.remove('active');
         document.getElementById('mainContainer').classList.remove('admin-mode');
+        document.getElementById('adminLoginBox').style.display = 'block';
         resetForm();
     }
 
@@ -552,7 +486,6 @@
 
         if (await syncToCloud(updatedList)) {
             addonsData = updatedList;
-            currentPage = 1;
             renderAddons();
             resetForm();
             alert("โพสต์แอดออนสำเร็จ!");
@@ -655,33 +588,49 @@
         }
     }
 
-    function changePage(step) {
-        currentPage += step;
-        renderAddons();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
     function renderAddons() {
         const list = document.getElementById('addonList');
-        const paginationControls = document.getElementById('paginationControls');
         list.innerHTML = '';
 
         if (!Array.isArray(addonsData) || addonsData.length === 0) {
             list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในขณะนี้</div>';
-            paginationControls.style.display = 'none';
             return;
         }
 
-        const totalPages = Math.ceil(addonsData.length / itemsPerPage);
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
-
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const currentItems = addonsData.slice(startIndex, endIndex);
-
-        currentItems.forEach(item => {
+        addonsData.forEach(item => {
             const card = document.createElement('div');
             card.className = 'addon-card';
 
-    
+            card.innerHTML = `
+                <div class="admin-controls">
+                    <button class="edit-btn" onclick="startEdit(${item.id})">EDIT</button>
+                    <button class="delete-btn" onclick="deleteAddon(${item.id})">DELETE</button>
+                </div>
+                <div class="addon-img-wrapper">
+                    <img src="${escapeHtml(item.image)}" class="addon-img" alt="preview" onerror="this.src='https://via.placeholder.com/600x337/181818/ffffff?text=Image+Not+Found'">
+                </div>
+                <div class="addon-content">
+                    <div class="addon-title">${escapeHtml(item.title)}</div>
+                    <a href="${escapeHtml(item.downloadUrl)}" target="_blank" class="btn-download">
+                        DOWNLOAD FILE
+                    </a>
+                </div>
+            `;
+
+            list.appendChild(card);
+        });
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
+
+</body>
+</html>
