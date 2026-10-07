@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MINECRAFT ADDONS</title>
+    <title>ADDON HUB</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: #080808;
+            background-color: #0a0a0a;
             color: #ffffff;
             padding: 20px 16px;
             display: flex;
@@ -23,23 +23,23 @@
 
         .container {
             width: 100%;
-            max-width: 650px;
+            max-width: 600px;
         }
 
-        /* Minimal Header */
+        /* Header */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid #1a1a1a;
         }
 
         .header h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             color: #fff;
         }
 
@@ -48,15 +48,15 @@
         }
 
         .admin-lock-btn {
-            background: #121212;
+            background: #141414;
             border: 1px solid #ff003c;
             color: #ff003c;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 6px;
-            transition: 0.2s ease;
+            transition: 0.2s;
         }
 
         .admin-lock-btn:hover {
@@ -64,107 +64,20 @@
             color: #fff;
         }
 
-        /* Custom Modal Popup */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            animation: fadeIn 0.2s ease;
-        }
-
-        .modal-box {
-            background: #111111;
-            border: 1px solid #ff003c;
-            border-radius: 12px;
-            padding: 24px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 10px 30px rgba(255, 0, 60, 0.2);
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .modal-subtitle {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 20px;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 12px;
-            background: #181818;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 15px;
-            outline: none;
-            margin-bottom: 20px;
-        }
-
-        .modal-input:focus {
-            border-color: #ff003c;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            padding: 10px;
-            background: #1e1e1e;
-            border: none;
-            border-radius: 6px;
-            color: #aaa;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-confirm {
-            flex: 1;
-            padding: 10px;
-            background: #ff003c;
-            border: none;
-            border-radius: 6px;
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Admin Zone Form */
+        /* Admin Form Card */
         .admin-card {
             display: none;
-            background: #111111;
-            border: 1px solid #222;
-            border-left: 4px solid #ff003c;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
+            background: #121212;
+            border: 1px solid #ff003c;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(255, 0, 60, 0.15);
         }
 
         .admin-card.active {
             display: block;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.2s ease;
         }
 
         @keyframes fadeIn {
@@ -173,9 +86,9 @@
         }
 
         .card-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             color: #ff003c;
             display: flex;
             justify-content: space-between;
@@ -183,20 +96,20 @@
         }
 
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             color: #aaa;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         input[type="text"], input[type="url"] {
             width: 100%;
-            padding: 10px 12px;
-            background: #181818;
+            padding: 10px;
+            background: #1a1a1a;
             border: 1px solid #2a2a2a;
             border-radius: 6px;
             color: #fff;
@@ -204,85 +117,75 @@
             outline: none;
         }
 
-        input[type="text"]:focus, input[type="url"]:focus {
+        input:focus {
             border-color: #ff003c;
         }
 
         .btn-submit {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background: #ff003c;
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             margin-top: 6px;
-            transition: 0.2s ease;
+            transition: 0.2s;
         }
 
         .btn-submit:hover {
             background: #d60032;
         }
 
-        .btn-submit:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        /* Addon Cards */
+        /* Addon List */
         .addon-grid {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .addon-card {
-            background: #111111;
-            border: 1px solid #1a1a1a;
+            background: #121212;
+            border: 1px solid #1f1f1f;
             border-radius: 10px;
             overflow: hidden;
-            transition: 0.2s ease;
-        }
-
-        .addon-card:hover {
-            border-color: #333;
+            position: relative;
         }
 
         .addon-img {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
-            background: #181818;
+            background: #1a1a1a;
             display: block;
         }
 
         .addon-content {
-            padding: 16px;
+            padding: 14px;
         }
 
         .addon-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .btn-download {
             display: block;
             width: 100%;
-            padding: 12px;
-            background: #181818;
+            padding: 10px;
+            background: #1a1a1a;
             color: #ff003c;
             border: 1px solid #ff003c;
             text-align: center;
             text-decoration: none;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             border-radius: 6px;
-            transition: 0.2s ease;
+            transition: 0.2s;
         }
 
         .btn-download:hover {
@@ -292,10 +195,10 @@
 
         .empty-text {
             text-align: center;
-            color: #555;
-            padding: 30px;
-            font-size: 14px;
-            background: #111;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 13px;
+            background: #121212;
             border-radius: 8px;
             border: 1px dashed #222;
         }
@@ -314,11 +217,100 @@
             color: #fff;
             border-color: #666;
         }
+
+        .delete-btn {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 0, 60, 0.9);
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 700;
+            z-index: 5;
+        }
+
+        .admin-mode .delete-btn {
+            display: block;
+        }
+
+        /* Password Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #121212;
+            border: 1px solid #ff003c;
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .modal-subtitle {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-cancel, .btn-confirm {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-cancel { background: #222; color: #aaa; }
+        .btn-confirm { background: #ff003c; color: #fff; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="mainContainer">
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
         <button class="admin-lock-btn" onclick="openModal()">ADMIN</button>
@@ -327,7 +319,7 @@
     <!-- ฟอร์มลงแอดออน (Admin) -->
     <div class="admin-card" id="adminForm">
         <div class="card-title">
-            <span>UPLOAD ADDON</span>
+            <span>ADD NEW ADDON</span>
             <button class="logout-btn" onclick="logoutAdmin()">LOGOUT</button>
         </div>
         <div class="form-group">
@@ -335,28 +327,26 @@
             <input type="text" id="addonTitle" placeholder="เช่น: Déesse UI v1.3.95" required>
         </div>
         <div class="form-group">
-            <label>ลิงก์รูปภาพตัวอย่าง (วาง URL รูปภาพ)</label>
-            <input type="url" id="addonImage" placeholder="https://..." required>
+            <label>ลิงก์รูปภาพตัวอย่าง (URL)</label>
+            <input type="url" id="addonImage" placeholder="วางลิงก์รูปภาพ..." required>
         </div>
         <div class="form-group">
             <label>ลิงก์ดาวน์โหลดแอดออน (MediaFire / Google Drive / Discord)</label>
-            <input type="url" id="addonFile" placeholder="https://www.mediafire.com/file/..." required>
+            <input type="url" id="addonFile" placeholder="วางลิงก์ไฟล์..." required>
         </div>
-        <button class="btn-submit" id="submitBtn" onclick="uploadAddon()">POST ADDON</button>
+        <button class="btn-submit" onclick="uploadAddon()">POST ADDON</button>
     </div>
 
     <!-- รายการแอดออน -->
-    <div class="addon-grid" id="addonList">
-        <div class="empty-text">กำลังโหลดรายการแอดออน...</div>
-    </div>
+    <div class="addon-grid" id="addonList"></div>
 </div>
 
-<!-- Modal Popup ใส่รหัสผ่าน -->
+<!-- Modal รหัสผ่าน -->
 <div class="modal-overlay" id="passwordModal">
     <div class="modal-box">
-        <div class="modal-title">ACCESS CONTROL</div>
-        <div class="modal-subtitle">กรุณากรอกรหัสผ่านเพื่อเข้าสู่โหมดผู้ดูแลระบบ</div>
-        <input type="password" class="modal-input" id="passInput" placeholder="Enter Password..." onkeyup="handleKey(event)">
+        <div class="modal-title">ADMIN ACCESS</div>
+        <div class="modal-subtitle">กรอกรหัสผ่านเพื่อเข้าสู่ระบบผู้ดูแล</div>
+        <input type="password" class="modal-input" id="passInput" placeholder="Password..." onkeyup="handleKey(event)">
         <div class="modal-actions">
             <button class="btn-cancel" onclick="closeModal()">ยกเลิก</button>
             <button class="btn-confirm" onclick="checkPassword()">ยืนยัน</button>
@@ -365,14 +355,15 @@
 </div>
 
 <script>
-    const BIN_ID = '6ac4fd7eac6210605a193eb2';
-    const MASTER_KEY = '$2a$10$c050I32SC1yvzC7XK5SW1e-q3X3bW7I';
-    const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
     let addonsData = [];
 
+    // โหลดข้อมูลเมื่อเปิดหน้าเว็บ
     window.onload = function() {
-        fetchAddons();
+        const stored = localStorage.getItem('my_addons_list');
+        if (stored) {
+            addonsData = JSON.parse(stored);
+        }
+        renderAddons();
     };
 
     function openModal() {
@@ -394,6 +385,7 @@
         if (pass === "black.1234") {
             closeModal();
             document.getElementById('adminForm').classList.add('active');
+            document.getElementById('mainContainer').classList.add('admin-mode');
         } else {
             alert("รหัสผ่านไม่ถูกต้อง!");
             document.getElementById('passInput').value = '';
@@ -402,77 +394,46 @@
 
     function logoutAdmin() {
         document.getElementById('adminForm').classList.remove('active');
+        document.getElementById('mainContainer').classList.remove('admin-mode');
     }
 
-    function fetchAddons() {
-        fetch(API_URL, {
-            method: 'GET',
-            headers: {
-                'X-Master-Key': MASTER_KEY,
-                'X-Bin-Meta': 'false'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            addonsData = Array.isArray(data) ? data : [];
-            renderAddons();
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById('addonList').innerHTML = '<div class="empty-text">ไม่สามารถดึงข้อมูลได้</div>';
-        });
-    }
-
-    async function uploadAddon() {
+    function uploadAddon() {
         const title = document.getElementById('addonTitle').value.trim();
         const imgUrl = document.getElementById('addonImage').value.trim();
         const fileUrl = document.getElementById('addonFile').value.trim();
-        const submitBtn = document.getElementById('submitBtn');
 
         if (!title || !imgUrl || !fileUrl) {
             alert("กรุณากรอกข้อมูลให้ครบทุกช่อง!");
             return;
         }
 
-        submitBtn.disabled = true;
-        submitBtn.innerText = "UPLOADING...";
+        const newAddon = {
+            id: Date.now(),
+            title: title,
+            image: imgUrl,
+            downloadUrl: fileUrl
+        };
 
-        try {
-            const newAddon = {
-                id: Date.now(),
-                title: title,
-                image: imgUrl,
-                downloadUrl: fileUrl
-            };
+        addonsData.unshift(newAddon);
+        saveAndRender();
 
-            addonsData.unshift(newAddon);
+        // ล้างฟอร์ม
+        document.getElementById('addonTitle').value = '';
+        document.getElementById('addonImage').value = '';
+        document.getElementById('addonFile').value = '';
+        alert("โพสต์แอดออนสำเร็จ!");
+    }
 
-            const res = await fetch(API_URL, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': MASTER_KEY
-                },
-                body: JSON.stringify(addonsData)
-            });
-
-            if (res.ok) {
-                alert("โพสต์แอดออนเรียบร้อยแล้ว!");
-                document.getElementById('addonTitle').value = '';
-                document.getElementById('addonImage').value = '';
-                document.getElementById('addonFile').value = '';
-                renderAddons();
-            } else {
-                throw new Error("บันทึกไม่สำเร็จ");
-            }
-        } catch (err) {
-            console.error(err);
-            alert("เกิดข้อผิดพลาดในการโพสต์ข้อมูล");
-            addonsData.shift();
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "POST ADDON";
+    function deleteAddon(id) {
+        if (confirm("ต้องการลบแอดออนนี้ใช่หรือไม่?")) {
+            addonsData = addonsData.filter(item => item.id !== id);
+            saveAndRender();
         }
+    }
+
+    function saveAndRender() {
+        localStorage.setItem('my_addons_list', JSON.stringify(addonsData));
+        renderAddons();
     }
 
     function renderAddons() {
@@ -480,7 +441,7 @@
         list.innerHTML = '';
 
         if (addonsData.length === 0) {
-            list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในขณะนี้</div>';
+            list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในขณะนี้ (เข้าโหมด ADMIN เพื่อเพิ่มแอดออน)</div>';
             return;
         }
 
@@ -489,7 +450,8 @@
             card.className = 'addon-card';
 
             card.innerHTML = `
-                <img src="${escapeHtml(item.image)}" class="addon-img" alt="${escapeHtml(item.title)}" onerror="this.src='https://via.placeholder.com/600x300/181818/ffffff?text=No+Image'">
+                <button class="delete-btn" onclick="deleteAddon(${item.id})">DELETE</button>
+                <img src="${escapeHtml(item.image)}" class="addon-img" alt="preview" onerror="this.src='https://via.placeholder.com/600x300/121212/ffffff?text=Image+Not+Found'">
                 <div class="addon-content">
                     <div class="addon-title">${escapeHtml(item.title)}</div>
                     <a href="${escapeHtml(item.downloadUrl)}" target="_blank" class="btn-download">
@@ -503,6 +465,7 @@
     }
 
     function escapeHtml(text) {
+        if (!text) return '';
         return text
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
