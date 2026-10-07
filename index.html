@@ -25,6 +25,7 @@
         .container {
             width: 100%;
             max-width: 540px;
+            padding-bottom: 60px;
         }
 
         /* Header */
@@ -49,21 +50,32 @@
             text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
         }
 
-        .admin-toggle-btn {
+        /* Floating Admin Button (ปุ่มแอดมินแบบลอย) */
+        .floating-admin-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
             background: #121212;
-            border: 1px solid #ff003c;
+            border: 2px solid #ff003c;
             color: #ff003c;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 800;
             cursor: pointer;
-            padding: 6px 14px;
-            border-radius: 8px;
+            padding: 10px 18px;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(255, 0, 60, 0.4);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             transition: all 0.2s ease;
         }
 
-        .admin-toggle-btn:hover {
+        .floating-admin-btn:hover {
             background: #ff003c;
             color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 0, 60, 0.6);
         }
 
         /* Admin Login Modal (หน้าต่างป็อปอัป UI) */
@@ -432,18 +444,6 @@
             padding-top: 15px;
             border-top: 1px solid #1a1a1a;
         }
-
-        .footer-admin-btn {
-            background: transparent;
-            color: #444;
-            border: none;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        .footer-admin-btn:hover {
-            color: #888;
-        }
     </style>
 </head>
 <body>
@@ -452,8 +452,12 @@
     <!-- Header -->
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
-        <button class="admin-toggle-btn" id="adminHeaderBtn" type="button" onclick="handleAdminButtonClick()">ADMIN</button>
     </div>
+
+    <!-- Floating Admin Button (ปุ่มเปิด UI แอดมินแบบลอย) -->
+    <button class="floating-admin-btn" id="adminFloatingBtn" type="button" onclick="handleAdminButtonClick()">
+        ⚡ ADMIN
+    </button>
 
     <!-- UI Modal ล็อกอินแอดมิน -->
     <div class="modal-overlay" id="adminLoginModal">
@@ -522,11 +526,6 @@
     <div class="addon-grid" id="addonList">
         <div class="empty-text">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div>
     </div>
-
-    <!-- Footer -->
-    <div class="footer-admin">
-        <button class="footer-admin-btn" type="button" onclick="openLoginModal()">[ ADMIN LOGIN ]</button>
-    </div>
 </div>
 
 <script>
@@ -572,7 +571,6 @@
 
     function checkPassword() {
         const pass = document.getElementById('passInput').value;
-        // เปลี่ยนรหัสผ่านใหม่ตรงนี้
         if (pass === "elite.1190") {
             isAdminLoggedIn = true;
             closeLoginModal();
@@ -687,7 +685,4 @@
         }
 
         submitBtn.disabled = true;
-        submitBtn.innerText = "UPLOADING...";
-
-        const newAddon = {
-            i
+        submitBtn.innerText = "UPLO
