@@ -22,7 +22,7 @@
             padding-bottom: 70px;
         }
 
-        /* Sidebar Nav for Desktop / Bottom Nav for Mobile */
+        /* Navigation Bar */
         .navbar {
             position: fixed;
             bottom: 0;
@@ -78,7 +78,7 @@
         .auth-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.92);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -116,6 +116,15 @@
         .auth-tab.active {
             color: #ff003c;
             border-bottom: 2px solid #ff003c;
+        }
+
+        .error-msg {
+            color: #ff3355;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
         }
 
         .header {
@@ -307,7 +316,6 @@
             font-size: 12px;
         }
 
-        /* Admin Controls on Card */
         .admin-controls {
             position: absolute;
             top: 10px;
@@ -328,7 +336,6 @@
         .edit-btn { background: #ffaa00; color: #000; }
         .delete-btn { background: #ff003c; color: #fff; }
 
-        /* Visitor Counter */
         .visitor-counter {
             text-align: center;
             margin-top: 30px;
@@ -348,10 +355,10 @@
 
     <!-- Navigation Bar -->
     <div class="navbar">
-        <button class="nav-btn active" onclick="switchPage('home')"><i class="fa-solid fa-gamepad"></i></button>
-        <button class="nav-btn" onclick="switchPage('search')"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button class="nav-btn" onclick="switchPage('favorites')"><i class="fa-solid fa-heart"></i></button>
-        <button class="nav-btn" onclick="switchPage('settings')"><i class="fa-solid fa-gear"></i></button>
+        <button class="nav-btn active" onclick="switchPage('home', this)"><i class="fa-solid fa-gamepad"></i></button>
+        <button class="nav-btn" onclick="switchPage('search', this)"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="nav-btn" onclick="switchPage('favorites', this)"><i class="fa-solid fa-heart"></i></button>
+        <button class="nav-btn" onclick="switchPage('settings', this)"><i class="fa-solid fa-gear"></i></button>
     </div>
 
     <div class="container">
@@ -368,6 +375,9 @@
                     <button class="auth-tab active" id="tabLogin" onclick="setAuthTab('login')">ลงชื่อเข้าใช้</button>
                     <button class="auth-tab" id="tabRegister" onclick="setAuthTab('register')">สมัครสมาชิก</button>
                 </div>
+
+                <!-- Error Message Alert Box -->
+                <div class="error-msg" id="authError"></div>
 
                 <!-- Login Form -->
                 <div id="loginForm">
@@ -399,17 +409,12 @@
 
         <!-- PAGE 1: HOME -->
         <div class="page-section active" id="pageHome">
-            <!-- Admin Create Addon / Category Card -->
             <div id="adminPanel" style="display: none; background: #121212; border: 1px solid #ff003c; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
                 <h3 style="color: #ff003c; font-size: 14px; margin-bottom: 12px;">⚡ ADMIN CONTROL PANEL</h3>
-                
-                <!-- Category Creation -->
                 <div style="display: flex; gap: 6px; margin-bottom: 14px;">
                     <input type="text" id="newCatInput" placeholder="+ หมวดหมู่ใหม่..." style="flex: 1;">
                     <button onclick="addCategory()" style="background: #333; color: #fff; border: none; padding: 0 12px; border-radius: 6px; font-weight: 700;">เพิ่ม</button>
                 </div>
-
-                <!-- Addon Form -->
                 <div class="form-group"><label>ชื่อแอดออน</label><input type="text" id="addonTitle"></div>
                 <div class="form-group">
                     <label>หมวดหมู่</label>
@@ -420,10 +425,7 @@
                 <button class="btn-primary" id="addonSubmitBtn" onclick="saveAddon()">POST ADDON</button>
             </div>
 
-            <!-- Categories Tabs -->
             <div class="categories-wrapper" id="categoryTabs"></div>
-
-            <!-- Addon List -->
             <div class="addon-grid" id="addonList"></div>
         </div>
 
@@ -474,23 +476,37 @@
     let editingAddonId = null;
     let userFavorites = JSON.parse(localStorage.getItem('myFavorites') || '[]');
 
-    window.onload = async function() {
-        await loadCloudData();
+    window.onload = function() {
         checkLoginSession();
-        updateVisitorCount();
         renderCategories();
         renderAddons();
+        loadCloudData();
     };
 
-    // --- CLOUD SYNC ---
+    function showError(msg) {
+        const errBox = document.getElementById('authError');
+        errBox.innerText = msg;
+        errBox.style.display = 'block';
+    }
+
+    function clearError() {
+        const errBox = document.getElementById('authError');
+        errBox.innerText = '';
+        errBox.style.display = 'none';
+    }
+
     async function loadCloudData() {
         try {
             const res = await fetch(API_URL + '/latest', {
                 headers: { 'X-Master-Key': MASTER_KEY, 'X-Bin-Meta': 'false' }
             });
             const data = await res.json();
-            if (data && data.addons) {
-                appData = data;
+            if (data) {
+                if (data.record) appData = data.record;
+                else if (data.addons) appData = data;
+                updateVisitorCount();
+                renderCategories();
+                renderAddons();
             }
         } catch (e) {
             console.error("Cloud load error", e);
@@ -509,7 +525,6 @@
         }
     }
 
-    // --- AUTH SYSTEM ---
     function checkLoginSession() {
         const saved = localStorage.getItem('currentUser');
         if (saved) {
@@ -526,6 +541,7 @@
     }
 
     function setAuthTab(tab) {
+        clearError();
         document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
         document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
         document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
@@ -533,12 +549,13 @@
     }
 
     function handleRegister() {
+        clearError();
         const u = document.getElementById('regUsername').value.trim();
         const p = document.getElementById('regPassword').value.trim();
 
-        if (!u || !p) return alert("กรุณากรอกข้อมูลให้ครบ");
+        if (!u || !p) return showError("⚠️ กรุณากรอกข้อมูลให้ครบถ้วน");
         if (appData.users.some(x => x.username === u) || u === "elite.1190") {
-            return alert("ชื่อผู้ใช้นี้ถูกใช้งานแล้ว");
+            return showError("⚠️ ชื่อผู้ใช้นี้ถูกใช้งานแล้ว");
         }
 
         const newUser = { username: u, password: p, isAdmin: false };
@@ -550,10 +567,13 @@
     }
 
     function handleLogin() {
+        clearError();
         const u = document.getElementById('loginUsername').value.trim();
         const p = document.getElementById('loginPassword').value.trim();
 
-        // Admin Special Logic
+        if (!u || !p) return showError("⚠️ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
+
+        // Admin Special Check
         if (u === "elite.1190" && p === "black.1190") {
             const adminUser = { username: "elite.1190", isAdmin: true };
             loginUser(adminUser);
@@ -564,7 +584,7 @@
         if (found) {
             loginUser(found);
         } else {
-            alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+            showError("⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
         }
     }
 
@@ -583,23 +603,10 @@
         location.reload();
     }
 
-    // --- CATEGORY SYSTEM ---
     function addCategory() {
         const name = document.getElementById('newCatInput').value.trim().toUpperCase();
         if (name && !appData.categories.includes(name)) {
             appData.categories.push(name);
             document.getElementById('newCatInput').value = '';
             syncToCloud();
-            renderCategories();
-        }
-    }
-
-    function renderCategories() {
-        const wrap = document.getElementById('categoryTabs');
-        const select = document.getElementById('addonCatSelect');
-        wrap.innerHTML = `<button class="cat-btn ${selectedCat === 'ALL' ? 'active' : ''}" onclick="filterCat('ALL')">ALL</button>`;
-        select.innerHTML = '';
-
-        appData.categories.forEach(c => {
-            wrap.innerHTML += `<button class="cat-btn ${selectedCat === c ? 'active' : ''}" onclick="filterCat('${c}')">${c}</button>`;
-            select.innerHTML
+         
