@@ -64,7 +64,7 @@
             color: #fff;
         }
 
-        /* Custom Modal Popup สำหรับใส่รหัสผ่าน */
+        /* Custom Modal Popup */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -151,7 +151,7 @@
             cursor: pointer;
         }
 
-        /* Minimal Form ( Admin Zone ) */
+        /* Admin Zone Form */
         .admin-card {
             display: none;
             background: #111111;
@@ -193,7 +193,7 @@
             font-size: 13px;
         }
 
-        input[type="text"], input[type="file"] {
+        input[type="text"], input[type="url"] {
             width: 100%;
             padding: 10px 12px;
             background: #181818;
@@ -204,7 +204,7 @@
             outline: none;
         }
 
-        input[type="text"]:focus {
+        input[type="text"]:focus, input[type="url"]:focus {
             border-color: #ff003c;
         }
 
@@ -232,7 +232,7 @@
             cursor: not-allowed;
         }
 
-        /* Minimal Addon Cards */
+        /* Addon Cards */
         .addon-grid {
             display: flex;
             flex-direction: column;
@@ -335,12 +335,12 @@
             <input type="text" id="addonTitle" placeholder="เช่น: Déesse UI v1.3.95" required>
         </div>
         <div class="form-group">
-            <label>เลือกไฟล์รูปภาพตัวอย่าง</label>
-            <input type="file" id="addonImage" accept="image/*" required>
+            <label>ลิงก์รูปภาพตัวอย่าง (วาง URL รูปภาพ)</label>
+            <input type="url" id="addonImage" placeholder="https://..." required>
         </div>
         <div class="form-group">
-            <label>เลือกไฟล์แอดออน (.mcaddon / .mcpack / .zip)</label>
-            <input type="file" id="addonFile" required>
+            <label>ลิงก์ดาวน์โหลดแอดออน (MediaFire / Google Drive / Discord)</label>
+            <input type="url" id="addonFile" placeholder="https://www.mediafire.com/file/..." required>
         </div>
         <button class="btn-submit" id="submitBtn" onclick="uploadAddon()">POST ADDON</button>
     </div>
@@ -351,7 +351,7 @@
     </div>
 </div>
 
-<!-- Modal Popup สำหรับใส่รหัสผ่าน -->
+<!-- Modal Popup ใส่รหัสผ่าน -->
 <div class="modal-overlay" id="passwordModal">
     <div class="modal-box">
         <div class="modal-title">ACCESS CONTROL</div>
@@ -423,42 +423,13 @@
         });
     }
 
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
-
-    // ฟังก์ชันย่อขนาดรูปภาพอัตโนมัติ เพื่อประหยัดพื้นที่ให้รองรับไฟล์ใหญ่
-    function compressImage(file) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const maxWidth = 800;
-                let scale = maxWidth / img.width;
-                if (scale > 1) scale = 1;
-                
-                canvas.width = img.width * scale;
-                canvas.height = img.height * scale;
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                resolve(canvas.toDataURL('image/jpeg', 0.7));
-            };
-        });
-    }
-
     async function uploadAddon() {
         const title = document.getElementById('addonTitle').value.trim();
-        const imgInput = document.getElementById('addonImage');
-        const fileInput = document.getElementById('addonFile');
+        const imgUrl = document.getElementById('addonImage').value.trim();
+        const fileUrl = document.getElementById('addonFile').value.trim();
         const submitBtn = document.getElementById('submitBtn');
 
-        if (!title || !imgInput.files[0] || !fileInput.files[0]) {
+        if (!title || !imgUrl || !fileUrl) {
             alert("กรุณากรอกข้อมูลให้ครบทุกช่อง!");
             return;
         }
@@ -467,16 +438,11 @@
         submitBtn.innerText = "UPLOADING...";
 
         try {
-            // ย่อรูปภาพลง และ แปลงไฟล์ม็อด
-            const imgBase64 = await compressImage(imgInput.files[0]);
-            const fileBase64 = await fileToBase64(fileInput.files[0]);
-
             const newAddon = {
                 id: Date.now(),
                 title: title,
-                image: imgBase64,
-                fileData: fileBase64,
-                fileName: fileInput.files[0].name
+                image: imgUrl,
+                downloadUrl: fileUrl
             };
 
             addonsData.unshift(newAddon);
@@ -491,7 +457,7 @@
             });
 
             if (res.ok) {
-                alert("อัปโหลดแอดออนเรียบร้อยแล้ว!");
+                alert("โพสต์แอดออนเรียบร้อยแล้ว!");
                 document.getElementById('addonTitle').value = '';
                 document.getElementById('addonImage').value = '';
                 document.getElementById('addonFile').value = '';
@@ -501,7 +467,7 @@
             }
         } catch (err) {
             console.error(err);
-            alert("เกิดข้อผิดพลาดในการอัปโหลดไฟล์ (ไฟล์อาจมีขนาดใหญ่เกินขีดจำกัดของระบบ)");
+            alert("เกิดข้อผิดพลาดในการโพสต์ข้อมูล");
             addonsData.shift();
         } finally {
             submitBtn.disabled = false;
@@ -523,10 +489,10 @@
             card.className = 'addon-card';
 
             card.innerHTML = `
-                <img src="${item.image}" class="addon-img" alt="${escapeHtml(item.title)}">
+                <img src="${escapeHtml(item.image)}" class="addon-img" alt="${escapeHtml(item.title)}" onerror="this.src='https://via.placeholder.com/600x300/181818/ffffff?text=No+Image'">
                 <div class="addon-content">
                     <div class="addon-title">${escapeHtml(item.title)}</div>
-                    <a href="${item.fileData}" download="${item.fileName || 'addon.mcaddon'}" class="btn-download">
+                    <a href="${escapeHtml(item.downloadUrl)}" target="_blank" class="btn-download">
                         DOWNLOAD FILE
                     </a>
                 </div>
@@ -547,5 +513,4 @@
 </script>
 
 </body>
-    </html>
-    
+</html>
