@@ -674,3 +674,21 @@
         try {
             const res = await fetch(API_URL, {
                 method: 
+
+                    function checkPassword() {
+        const passInput = document.getElementById('passInput');
+        if (!passInput) return;
+        
+        const pass = passInput.value.trim(); // ตัดช่องว่างหน้า-หลังออก
+        
+        if (pass === "black.1234") {
+            document.getElementById('adminLoginBox').style.display = 'none';
+            document.getElementById('adminForm').classList.add('active');
+            document.getElementById('mainContainer').classList.add('admin-mode');
+            passInput.value = '';
+        } else {
+            alert("รหัสผ่านไม่ถูกต้อง! (รหัสคือ: black.1234)");
+            passInput.value = '';
+        }
+    }
+    
