@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCRIPT HUB - ONLINE</title>
+    <title>MINECRAFT ADDON HUB</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,8 +13,8 @@
         }
 
         body {
-            background-color: #0f0f12;
-            color: #f1f1f1;
+            background-color: #121212;
+            color: #ffffff;
             padding: 20px;
             display: flex;
             justify-content: center;
@@ -22,16 +22,18 @@
 
         .container {
             width: 100%;
-            max-width: 650px;
+            max-width: 700px;
+            position: relative;
         }
 
+        /* Header */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e50914;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #388e3c; /* สีเขียว Minecraft */
         }
 
         .header h1 {
@@ -41,26 +43,48 @@
         }
 
         .header span {
-            color: #e50914;
-            font-weight: bold;
+            color: #4caf50;
         }
 
-        .card {
-            background: #18181c;
-            border: 1px solid #282830;
+        /* ปุ่มซ่อนรหัสผ่าน Admin */
+        .admin-lock-btn {
+            background: transparent;
+            border: none;
+            color: #444;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.3s;
+        }
+
+        .admin-lock-btn:hover {
+            color: #888;
+        }
+
+        /* โซนลงแอดออน (สำหรับ Admin เท่านั้น) */
+        .admin-card {
+            display: none; /* ซ่อนไว้เป็นค่าเริ่มต้น */
+            background: #1e1e1e;
+            border: 2px solid #4caf50;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+        }
+
+        .admin-card.active {
+            display: block; /* แสดงผลเมื่อใส่รหัสผ่านถูก */
         }
 
         .card-title {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #ffffff;
-            border-left: 4px solid #e50914;
-            padding-left: 10px;
+            color: #4caf50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .form-group {
@@ -70,45 +94,29 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #aaaaaa;
+            color: #cccccc;
             font-size: 14px;
         }
 
-        input[type="text"], textarea {
+        input[type="text"], input[type="file"] {
             width: 100%;
             padding: 12px;
-            background: #0f0f12;
-            border: 1px solid #33333e;
+            background: #2a2a2a;
+            border: 1px solid #444;
             border-radius: 8px;
             color: #fff;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.3s;
         }
 
-        input[type="text"]:focus, textarea:focus {
-            border-color: #e50914;
+        input[type="text"]:focus {
+            border-color: #4caf50;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-            font-family: monospace;
-        }
-
-        input[type="file"] {
-            background: #0f0f12;
-            padding: 8px;
-            border-radius: 8px;
-            width: 100%;
-            color: #aaa;
-            border: 1px dashed #33333e;
-        }
-
-        .btn {
+        .btn-submit {
             width: 100%;
             padding: 12px;
-            background: #e50914;
+            background: #388e3c;
             color: white;
             border: none;
             border-radius: 8px;
@@ -118,76 +126,83 @@
             transition: background 0.3s;
         }
 
-        .btn:hover {
-            background: #b20710;
+        .btn-submit:hover {
+            background: #2e7d32;
         }
 
-        .btn:disabled {
+        .btn-submit:disabled {
             background: #555;
             cursor: not-allowed;
         }
 
-        .script-item {
-            background: #18181c;
-            border: 1px solid #282830;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .script-header {
+        /* โซนแสดงรายการแอดออนสำหรับผู้ใช้อื่นๆ */
+        .addon-grid {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .script-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
+        .addon-card {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
         }
 
-        .script-img {
+        .addon-img {
             width: 100%;
-            max-height: 300px;
+            height: 250px;
             object-fit: cover;
+            background: #2a2a2a;
+            display: block;
+        }
+
+        .addon-content {
+            padding: 15px;
+        }
+
+        .addon-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .btn-download {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #4caf50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            transition: background 0.3s;
         }
 
-        .code-box {
-            background: #09090b;
-            padding: 10px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 12px;
-            color: #00ff66;
-            word-break: break-all;
-            position: relative;
-            margin-bottom: 10px;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-
-        .btn-copy {
-            background: #282830;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .btn-copy:hover {
-            background: #383845;
+        .btn-download:hover {
+            background: #388e3c;
         }
 
         .empty-text {
             text-align: center;
-            color: #666;
-            padding: 20px;
+            color: #888;
+            padding: 30px;
+            font-size: 16px;
+        }
+
+        .logout-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -195,50 +210,69 @@
 
 <div class="container">
     <div class="header">
-        <h1>SCRIPT <span>HUB</span></h1>
-        <small style="color:#888;">ออนไลน์ ☁️</small>
+        <h1>MINECRAFT <span>ADDON HUB</span></h1>
+        <!-- ปุ่มซ่อนรหัสผ่าน เล็กๆ อยู่ตรงมุม -->
+        <button class="admin-lock-btn" onclick="loginAdmin()" title="Admin Login">🔒</button>
     </div>
 
-    <!-- โซนเพิ่มสคริปต์ -->
-    <div class="card">
-        <div class="card-title">เพิ่มผลงานสคริปต์</div>
-        <div class="form-group">
-            <label>ชื่อสคริปต์</label>
-            <input type="text" id="scriptTitle" placeholder="ใส่ชื่อสคริปต์..." required>
+    <!-- ฟอร์มเพิ่มแอดออน (โชว์เฉพาะเวลากรอกรหัสผ่านถูก) -->
+    <div class="admin-card" id="adminForm">
+        <div class="card-title">
+            <span>➕ ลงแอดออนใหม่ (โหมดผู้ดูแลระบบ)</span>
+            <button class="logout-btn" onclick="logoutAdmin()">ออกจากระบบ</button>
         </div>
         <div class="form-group">
-            <label>เลือกรูปภาพตัวอย่างจากในเครื่อง (ใส่หรือไม่ใส่ก็ได้)</label>
-            <input type="file" id="scriptImage" accept="image/*">
+            <label>ชื่อแอดออน</label>
+            <input type="text" id="addonTitle" placeholder="เช่น: Furniture Addon v2.0" required>
         </div>
         <div class="form-group">
-            <label>ตัวสคริปต์ (Source Code)</label>
-            <textarea id="scriptCode" placeholder="วางโค้ดสคริปต์..." required></textarea>
+            <label>เลือกรูปภาพตัวอย่างแอดออน (จากในเครื่อง)</label>
+            <input type="file" id="addonImage" accept="image/*" required>
         </div>
-        <button class="btn" id="submitBtn" onclick="addScript()">ลงผลงาน</button>
+        <div class="form-group">
+            <label>เลือกไฟล์แอดออน (ไฟล์ .mcaddon / .mcpack / .zip จากในเครื่อง)</label>
+            <input type="file" id="addonFile" required>
+        </div>
+        <button class="btn-submit" id="submitBtn" onclick="uploadAddon()">โพสต์แอดออนลงเว็บ</button>
     </div>
 
-    <!-- โซนแสดงสคริปต์ทั้งหมด -->
-    <div class="card-title">รายการสคริปต์ทั้งหมดในระบบ</div>
-    <div id="scriptList">
-        <div class="empty-text">กำลังโหลดข้อมูลสคริปต์...</div>
+    <!-- รายการแอดออนทั้งหมด -->
+    <h2 style="font-size: 18px; margin-bottom: 15px; color: #bbb;">📦 แอดออนทั้งหมด</h2>
+    <div class="addon-grid" id="addonList">
+        <div class="empty-text">กำลังโหลดแอดออน...</div>
     </div>
 </div>
 
 <script>
-    // การตั้งค่า JSONBin.io
+    // การเชื่อมตั้งค่า JSONBin.io
     const BIN_ID = '6ac4fd7eac6210605a193eb2';
     const MASTER_KEY = '$2a$10$c050I32SC1yvzC7XK5SW1e-q3X3bW7I';
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    let scriptsData = [];
+    let addonsData = [];
 
-    // ดึงข้อมูลเมื่อโหลดหน้าเว็บ
     window.onload = function() {
-        fetchScripts();
+        fetchAddons();
     };
 
-    // ฟังก์ชันดึงข้อมูลสคริปต์จาก JSONBin
-    function fetchScripts() {
+    // ฟังก์ชันกดปุ่มล็อค เพื่อใส่รหัสผ่าน
+    function loginAdmin() {
+        const password = prompt("กรุณาใส่รหัสผ่านผู้ดูแลระบบ:");
+        if (password === "black.1234") {
+            alert("ยินดีต้อนรับ! ปลดล็อคระบบลงแอดออนแล้ว");
+            document.getElementById('adminForm').classList.add('active');
+        } else if (password !== null) {
+            alert("รหัสผ่านไม่ถูกต้อง!");
+        }
+    }
+
+    // ออกจากระบบ
+    function logoutAdmin() {
+        document.getElementById('adminForm').classList.remove('active');
+    }
+
+    // ดึงข้อมูลแอดออนจาก JSONBin
+    function fetchAddons() {
         fetch(API_URL, {
             method: 'GET',
             headers: {
@@ -246,139 +280,124 @@
                 'X-Bin-Meta': 'false'
             }
         })
-        .then(response => {
-            if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลได้');
-            return response.json();
-        })
+        .then(res => res.json())
         .then(data => {
-            scriptsData = Array.isArray(data) ? data : [];
-            renderScripts();
+            addonsData = Array.isArray(data) ? data : [];
+            renderAddons();
         })
         .catch(err => {
             console.error(err);
-            document.getElementById('scriptList').innerHTML = '<div class="empty-text" style="color:#e50914;">เกิดข้อผิดพลาดในการดึงข้อมูล</div>';
+            document.getElementById('addonList').innerHTML = '<div class="empty-text">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
         });
     }
 
-    // ฟังก์ชันบันทึกข้อมูลสคริปต์
-    function addScript() {
-        const title = document.getElementById('scriptTitle').value.trim();
-        const code = document.getElementById('scriptCode').value.trim();
-        const imageInput = document.getElementById('scriptImage');
+    // แปลงไฟล์เป็น Base64
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // ฟังก์ชันอัปโหลดแอดออน
+    async function uploadAddon() {
+        const title = document.getElementById('addonTitle').value.trim();
+        const imgInput = document.getElementById('addonImage');
+        const fileInput = document.getElementById('addonFile');
         const submitBtn = document.getElementById('submitBtn');
 
-        if (!title || !code) {
-            alert('กรุณากรอกชื่อสคริปต์และโค้ดสคริปต์ให้ครบถ้วน');
+        if (!title || !imgInput.files[0] || !fileInput.files[0]) {
+            alert("กรุณากรอกชื่อแอดออน, เลือกรูปภาพ และเลือกไฟล์แอดออนให้ครบถ้วน!");
+            return;
+        }
+
+        // ตรวจสอบขนาดไฟล์รูป (ไม่ควรเกิน 2MB)
+        if (imgInput.files[0].size > 2 * 1024 * 1024) {
+            alert("ไฟล์รูปภาพมีขนาดใหญ่เกินไป (กรุณาใช้รูปไม่เกิน 2MB)");
+            return;
+        }
+
+        // ตรวจสอบขนาดไฟล์แอดออน
+        if (fileInput.files[0].size > 3 * 1024 * 1024) {
+            alert("ไฟล์แอดออนมีขนาดใหญ่เกินไป (ระบบรองรับไฟล์ขนาดไม่เกิน 3MB)");
             return;
         }
 
         submitBtn.disabled = true;
-        submitBtn.innerText = 'กำลังบันทึกข้อมูล...';
+        submitBtn.innerText = "กำลังแปลงไฟล์และอัปโหลด...";
 
-        if (imageInput.files && imageInput.files[0]) {
-            const file = imageInput.files[0];
-            const reader = new FileReader();
+        try {
+            const imgBase64 = await fileToBase64(imgInput.files[0]);
+            const fileBase64 = await fileToBase64(fileInput.files[0]);
 
-            reader.onload = function(e) {
-                const imgBase64 = e.target.result;
-                saveToCloud(title, code, imgBase64);
+            const newAddon = {
+                id: Date.now(),
+                title: title,
+                image: imgBase64,
+                fileData: fileBase64,
+                fileName: fileInput.files[0].name
             };
 
-            reader.readAsDataURL(file);
-        } else {
-            saveToCloud(title, code, null);
+            addonsData.unshift(newAddon);
+
+            const res = await fetch(API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': MASTER_KEY
+                },
+                body: JSON.stringify(addonsData)
+            });
+
+            if (res.ok) {
+                alert("โพสต์แอดออนเรียบร้อยแล้ว!");
+                document.getElementById('addonTitle').value = '';
+                document.getElementById('addonImage').value = '';
+                document.getElementById('addonFile').value = '';
+                renderAddons();
+            } else {
+                throw new Error("บันทึกไม่สำเร็จ");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("เกิดข้อผิดพลาดในการอัปโหลดไฟล์ (ไฟล์อาจมีขนาดใหญ่เกินไป)");
+            addonsData.shift();
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "โพสต์แอดออนลงเว็บ";
         }
     }
 
-    // ฟังก์ชันส่งข้อมูลไปยัง JSONBin
-    function saveToCloud(title, code, imageBase64) {
-        const newScript = {
-            id: Date.now(),
-            title: title,
-            code: code,
-            image: imageBase64,
-            date: new Date().toLocaleDateString('th-TH')
-        };
+    // แสดงรายการแอดออนบนหน้าเว็บ
+    function renderAddons() {
+        const list = document.getElementById('addonList');
+        list.innerHTML = '';
 
-        scriptsData.unshift(newScript);
-
-        fetch(API_URL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': MASTER_KEY
-            },
-            body: JSON.stringify(scriptsData)
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('บันทึกไม่สำเร็จ');
-            return response.json();
-        })
-        .then(data => {
-            alert('ลงผลงานสำเร็จเรียบร้อยแล้ว!');
-            document.getElementById('scriptTitle').value = '';
-            document.getElementById('scriptCode').value = '';
-            document.getElementById('scriptImage').value = '';
-            renderScripts();
-        })
-        .catch(err => {
-            console.error(err);
-            alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
-            scriptsData.shift(); // ลบรายการล่าสุดออกหากบันทึกไม่สำเร็จ
-        })
-        .finally(() => {
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = false;
-            submitBtn.innerText = 'ลงผลงาน';
-        });
-    }
-
-    // ฟังก์ชันแสดงรายการสคริปต์บนหน้าเว็บ
-    function renderScripts() {
-        const listDiv = document.getElementById('scriptList');
-        listDiv.innerHTML = '';
-
-        if (scriptsData.length === 0) {
-            listDiv.innerHTML = '<div class="empty-text">ยังไม่มีผลงานสคริปต์ในระบบ</div>';
+        if (addonsData.length === 0) {
+            list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในระบบ</div>';
             return;
         }
 
-        scriptsData.forEach(item => {
-            const scriptCard = document.createElement('div');
-            scriptCard.className = 'script-item';
+        addonsData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'addon-card';
 
-            let imgHtml = item.image ? `<img src="${item.image}" class="script-img" alt="รูปตัวอย่าง">` : '';
-
-            scriptCard.innerHTML = `
-                <div class="script-header">
-                    <div class="script-title">${escapeHtml(item.title)}</div>
-                    <small style="color:#666;">${item.date || ''}</small>
+            card.innerHTML = `
+                <img src="${item.image}" class="addon-img" alt="${escapeHtml(item.title)}">
+                <div class="addon-content">
+                    <div class="addon-title">${escapeHtml(item.title)}</div>
+                    <a href="${item.fileData}" download="${item.fileName || 'addon.mcaddon'}" class="btn-download">
+                        ⬇️ ดาวน์โหลดแอดออน
+                    </a>
                 </div>
-                ${imgHtml}
-                <div class="code-box">${escapeHtml(item.code)}</div>
-                <button class="btn-copy" onclick="copyCode(this, \`${escapeHtml(item.code)}\`)">คัดลอกโค้ด</button>
             `;
 
-            listDiv.appendChild(scriptCard);
+            list.appendChild(card);
         });
     }
 
-    // ฟังก์ชันคัดลอกโค้ด
-    function copyCode(btn, codeText) {
-        navigator.clipboard.writeText(codeText).then(() => {
-            const originalText = btn.innerText;
-            btn.innerText = 'คัดลอกแล้ว!';
-            btn.style.background = '#00ff66';
-            btn.style.color = '#000';
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.background = '#282830';
-                btn.style.color = '#fff';
-            }, 2000);
-        });
-    }
-
-    // ฟังก์ชันป้องกัน XSS
     function escapeHtml(text) {
         return text
             .replace(/&/g, "&amp;")
