@@ -66,42 +66,97 @@
             color: #fff;
         }
 
-        /* Admin Login Box */
-        .admin-login-box {
+        /* Admin Login Modal (หน้าต่างป็อปอัป UI) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
             background: #121212;
             border: 1px solid #ff003c;
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.15);
+            border-radius: 14px;
+            padding: 24px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
+            text-align: center;
+            animation: modalFadeIn 0.2s ease;
         }
 
-        .login-row {
-            display: flex;
-            gap: 8px;
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .login-input {
-            flex: 1;
-            padding: 10px 12px;
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ff003c;
+            margin-bottom: 6px;
+        }
+
+        .modal-sub {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 18px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
             background: #1a1a1a;
             border: 1px solid #333;
-            border-radius: 6px;
+            border-radius: 8px;
             color: #fff;
-            font-size: 13px;
+            font-size: 14px;
             outline: none;
+            text-align: center;
+            margin-bottom: 14px;
         }
 
-        .login-input:focus {
+        .modal-input:focus {
             border-color: #ff003c;
         }
 
-        .login-btn {
+        .modal-btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn-login {
+            flex: 2;
             background: #ff003c;
             color: #fff;
             border: none;
-            padding: 0 16px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .modal-btn-close {
+            flex: 1;
+            background: #222;
+            color: #aaa;
+            border: 1px solid #333;
+            padding: 12px;
+            border-radius: 8px;
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
@@ -397,14 +452,19 @@
     <!-- Header -->
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
-        <button class="admin-toggle-btn" type="button" onclick="showLoginBox()">ADMIN</button>
+        <button class="admin-toggle-btn" id="adminHeaderBtn" type="button" onclick="handleAdminButtonClick()">ADMIN</button>
     </div>
 
-    <!-- Admin Login Input Box -->
-    <div class="admin-login-box" id="adminLoginBox">
-        <div class="login-row">
-            <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน Admin เข้าสู่ระบบ..." onkeyup="handleKey(event)">
-            <button class="login-btn" type="button" onclick="checkPassword()">เข้าสู่ระบบ</button>
+    <!-- UI Modal ล็อกอินแอดมิน -->
+    <div class="modal-overlay" id="adminLoginModal">
+        <div class="modal-box">
+            <div class="modal-title">🔐 ADMIN ACCESS</div>
+            <div class="modal-sub">กรอกรหัสผ่านเพื่อเข้าสู่ระบบจัดการแอดออน</div>
+            <input type="password" class="modal-input" id="passInput" placeholder="กรอกรหัสผ่าน..." onkeyup="handleKey(event)">
+            <div class="modal-btn-group">
+                <button class="modal-btn-login" type="button" onclick="checkPassword()">เข้าสู่ระบบ</button>
+                <button class="modal-btn-close" type="button" onclick="closeLoginModal()">ยกเลิก</button>
+            </div>
         </div>
     </div>
 
@@ -465,7 +525,7 @@
 
     <!-- Footer -->
     <div class="footer-admin">
-        <button class="footer-admin-btn" type="button" onclick="showLoginBox()">[ ADMIN LOGIN ]</button>
+        <button class="footer-admin-btn" type="button" onclick="openLoginModal()">[ ADMIN LOGIN ]</button>
     </div>
 </div>
 
@@ -482,16 +542,28 @@
     let currentCategory = 'ALL';
     let searchQuery = '';
     let editingAddonId = null;
+    let isAdminLoggedIn = false;
 
     window.onload = function() {
         loadAddons();
     };
 
-    function showLoginBox() {
-        const box = document.getElementById('adminLoginBox');
-        box.style.display = 'block';
+    function handleAdminButtonClick() {
+        if (isAdminLoggedIn) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            openLoginModal();
+        }
+    }
+
+    function openLoginModal() {
+        document.getElementById('adminLoginModal').classList.add('active');
+        document.getElementById('passInput').value = '';
         document.getElementById('passInput').focus();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeLoginModal() {
+        document.getElementById('adminLoginModal').classList.remove('active');
     }
 
     function handleKey(e) {
@@ -500,11 +572,13 @@
 
     function checkPassword() {
         const pass = document.getElementById('passInput').value;
-        if (pass === "black.1234") {
-            document.getElementById('adminLoginBox').style.display = 'none';
+        // เปลี่ยนรหัสผ่านใหม่ตรงนี้
+        if (pass === "elite.1190") {
+            isAdminLoggedIn = true;
+            closeLoginModal();
             document.getElementById('adminForm').classList.add('active');
             document.getElementById('mainContainer').classList.add('admin-mode');
-            document.getElementById('passInput').value = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             alert("รหัสผ่านไม่ถูกต้อง!");
             document.getElementById('passInput').value = '';
@@ -512,9 +586,9 @@
     }
 
     function logoutAdmin() {
+        isAdminLoggedIn = false;
         document.getElementById('adminForm').classList.remove('active');
         document.getElementById('mainContainer').classList.remove('admin-mode');
-        document.getElementById('adminLoginBox').style.display = 'block';
         resetForm();
     }
 
@@ -616,61 +690,4 @@
         submitBtn.innerText = "UPLOADING...";
 
         const newAddon = {
-            id: Date.now(),
-            title: title,
-            category: category,
-            image: imgUrl,
-            downloadUrl: fileUrl
-        };
-
-        appData.addons.unshift(newAddon);
-
-        if (await syncToCloud(appData)) {
-            renderAddons();
-            resetForm();
-            alert("โพสต์แอดออนสำเร็จ!");
-        }
-
-        submitBtn.disabled = false;
-        submitBtn.innerText = "POST ADDON";
-    }
-
-    function startEdit(id) {
-        const target = appData.addons.find(item => item.id === id);
-        if (!target) return;
-
-        editingAddonId = id;
-        document.getElementById('addonTitle').value = target.title;
-        document.getElementById('addonCategory').value = target.category || appData.categories[0];
-        document.getElementById('addonImage').value = target.image;
-        document.getElementById('addonFile').value = target.downloadUrl;
-
-        document.getElementById('formHeaderTitle').innerText = "✏️ EDIT ADDON";
-        document.getElementById('submitBtn').innerText = "UPDATE ADDON";
-        document.getElementById('cancelEditBtn').style.display = "block";
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    async function updateAddon() {
-        const title = document.getElementById('addonTitle').value.trim();
-        const category = document.getElementById('addonCategory').value;
-        const imgUrl = document.getElementById('addonImage').value.trim();
-        const fileUrl = document.getElementById('addonFile').value.trim();
-        const submitBtn = document.getElementById('submitBtn');
-
-        if (!title || !imgUrl || !fileUrl) {
-            alert("กรุณากรอกข้อมูลให้ครบทุกช่อง!");
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "UPDATING...";
-
-        appData.addons = appData.addons.map(item => {
-            if (item.id === editingAddonId) {
-                return { ...item, title: title, category: category, image: imgUrl, downloadUrl: fileUrl };
-            }
-            return item;
-        });
-    
+            i
