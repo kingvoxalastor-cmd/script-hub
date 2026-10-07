@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADDON HUB</title>
+    <title>ADDON HUB - Minecraft Addons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background-color: #0a0a0a;
+            background-color: #080808;
             color: #ffffff;
-            padding: 20px 16px;
+            padding: 20px 14px;
             display: flex;
             justify-content: center;
             min-height: 100vh;
@@ -23,7 +24,7 @@
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 540px;
         }
 
         /* Header */
@@ -31,63 +32,114 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid #1a1a1a;
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             letter-spacing: 1px;
             color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .header h1 span {
             color: #ff003c;
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
         }
 
-        .admin-lock-btn {
-            background: #141414;
+        .admin-toggle-btn {
+            background: #121212;
             border: 1px solid #ff003c;
             color: #ff003c;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             padding: 6px 14px;
-            border-radius: 6px;
-            transition: 0.2s;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
-        .admin-lock-btn:hover {
+        .admin-toggle-btn:hover {
             background: #ff003c;
             color: #fff;
+            box-shadow: 0 0 12px rgba(255, 0, 60, 0.4);
         }
 
-        /* Admin Form Card */
+        /* Admin Login Box (In-page) */
+        .admin-login-box {
+            display: none;
+            background: #121212;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 20px;
+            animation: slideDown 0.2s ease;
+        }
+
+        .admin-login-box.active {
+            display: block;
+        }
+
+        .login-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .login-input {
+            flex: 1;
+            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .login-input:focus {
+            border-color: #ff003c;
+        }
+
+        .login-btn {
+            background: #ff003c;
+            color: #fff;
+            border: none;
+            padding: 0 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Admin Management Form Card */
         .admin-card {
             display: none;
             background: #121212;
             border: 1px solid #ff003c;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 18px;
             margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(255, 0, 60, 0.15);
+            box-shadow: 0 4px 25px rgba(255, 0, 60, 0.2);
+            animation: slideDown 0.3s ease;
         }
 
         .admin-card.active {
             display: block;
-            animation: fadeIn 0.2s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .card-title {
             font-size: 15px;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 14px;
             color: #ff003c;
             display: flex;
@@ -101,17 +153,17 @@
 
         label {
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             color: #aaa;
             font-size: 12px;
         }
 
         input[type="text"], input[type="url"] {
             width: 100%;
-            padding: 10px;
-            background: #1a1a1a;
+            padding: 11px;
+            background: #181818;
             border: 1px solid #2a2a2a;
-            border-radius: 6px;
+            border-radius: 8px;
             color: #fff;
             font-size: 13px;
             outline: none;
@@ -124,18 +176,18 @@
         .btn-group-submit {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 14px;
         }
 
         .btn-submit {
             flex: 2;
-            padding: 10px;
+            padding: 12px;
             background: #ff003c;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -144,46 +196,62 @@
             background: #d60032;
         }
 
-        .btn-submit:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-        }
-
         .btn-cancel-edit {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             background: #222;
             color: #aaa;
             border: 1px solid #333;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             display: none;
         }
 
-        /* Addon List */
+        .logout-btn {
+            background: transparent;
+            color: #888;
+            border: 1px solid #333;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            color: #fff;
+            border-color: #ff003c;
+        }
+
+        /* Addon Grid Layout */
         .addon-grid {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 18px;
         }
 
         .addon-card {
             background: #121212;
-            border: 1px solid #1f1f1f;
-            border-radius: 10px;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
-        /* ปรับรูปภาพให้แสดงผลแบบ 16:9 สมบูรณ์สวยงาม */
+        .addon-card:hover {
+            border-color: #2a2a2a;
+            transform: translateY(-2px);
+        }
+
+        /* สัดส่วนรูปภาพ 16:9 สไตล์เกมมิ่ง */
         .addon-img-wrapper {
             width: 100%;
             aspect-ratio: 16 / 9;
-            background: #1a1a1a;
+            background: #181818;
             overflow: hidden;
+            position: relative;
         }
 
         .addon-img {
@@ -194,62 +262,52 @@
         }
 
         .addon-content {
-            padding: 14px;
+            padding: 16px;
         }
 
         .addon-title {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 800;
             color: #ffffff;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            line-height: 1.4;
         }
 
         .btn-download {
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 100%;
-            padding: 10px;
-            background: #1a1a1a;
+            padding: 12px;
+            background: #181818;
             color: #ff003c;
             border: 1px solid #ff003c;
             text-align: center;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 13px;
-            border-radius: 6px;
+            border-radius: 8px;
             transition: 0.2s;
+            letter-spacing: 0.5px;
         }
 
         .btn-download:hover {
             background: #ff003c;
             color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
         }
 
         .empty-text {
             text-align: center;
             color: #666;
-            padding: 40px 20px;
+            padding: 50px 20px;
             font-size: 13px;
             background: #121212;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px dashed #222;
         }
 
-        .logout-btn {
-            background: transparent;
-            color: #888;
-            border: 1px solid #333;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        .logout-btn:hover {
-            color: #fff;
-            border-color: #666;
-        }
-
-        /* Admin Action Control On Card */
+        /* Admin Control Overlay Buttons */
         .admin-controls {
             display: none;
             position: absolute;
@@ -264,28 +322,28 @@
         }
 
         .edit-btn {
-            background: rgba(255, 170, 0, 0.9);
+            background: rgba(255, 170, 0, 0.95);
             color: #000;
             border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 11px;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .delete-btn {
-            background: rgba(255, 0, 60, 0.9);
+            background: rgba(255, 0, 60, 0.95);
             color: #fff;
             border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 11px;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 800;
         }
 
-        /* Pagination Control */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: space-between;
@@ -296,13 +354,13 @@
         }
 
         .page-btn {
-            background: #141414;
+            background: #121212;
             color: #ff003c;
             border: 1px solid #222;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 8px 18px;
+            border-radius: 8px;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -314,143 +372,70 @@
         }
 
         .page-btn:disabled {
-            color: #444;
-            border-color: #1a1a1a;
+            color: #333;
+            border-color: #121212;
             cursor: not-allowed;
         }
 
         .page-info {
             font-size: 12px;
-            color: #888;
+            color: #777;
             font-weight: 600;
         }
-
-        /* Password Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(4px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-box {
-            background: #121212;
-            border: 1px solid #ff003c;
-            border-radius: 10px;
-            padding: 20px;
-            width: 100%;
-            max-width: 320px;
-        }
-
-        .modal-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-
-        .modal-subtitle {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 16px;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 10px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            margin-bottom: 16px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-cancel, .btn-confirm {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .btn-cancel { background: #222; color: #aaa; }
-        .btn-confirm { background: #ff003c; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="container" id="mainContainer">
+    <!-- Header -->
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
-        <button class="admin-lock-btn" id="adminBtn">ADMIN</button>
+        <button class="admin-toggle-btn" onclick="toggleAdminPanel()">ADMIN</button>
     </div>
 
-    <!-- ฟอร์มลง/แก้ไข แอดออน (Admin) -->
+    <!-- Admin Login Input Box -->
+    <div class="admin-login-box" id="adminLoginBox">
+        <div class="login-row">
+            <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน Admin..." onkeyup="handleKey(event)">
+            <button class="login-btn" onclick="checkPassword()">เข้าสู่ระบบ</button>
+        </div>
+    </div>
+
+    <!-- Admin Management Panel -->
     <div class="admin-card" id="adminForm">
         <div class="card-title">
-            <span id="formHeaderTitle">ADD NEW ADDON</span>
+            <span id="formHeaderTitle">⚡ ADD NEW ADDON</span>
             <button class="logout-btn" onclick="logoutAdmin()">LOGOUT</button>
         </div>
         <div class="form-group">
             <label>ชื่อแอดออน</label>
-            <input type="text" id="addonTitle" placeholder="เช่น: CARRY MORE Add-On" required>
+            <input type="text" id="addonTitle" placeholder="เช่น: CARRY MORE Add-On v1.0" required>
         </div>
         <div class="form-group">
             <label>ลิงก์รูปภาพตัวอย่าง (URL)</label>
-            <input type="url" id="addonImage" placeholder="วางลิงก์รูปภาพ..." required>
+            <input type="url" id="addonImage" placeholder="https://..." required>
         </div>
         <div class="form-group">
-            <label>ลิงก์ดาวน์โหลดแอดออน (MediaFire / Google Drive / Discord)</label>
-            <input type="url" id="addonFile" placeholder="วางลิงก์ไฟล์..." required>
+            <label>ลิงก์ดาวน์โหลดแอดออน (MediaFire / Google Drive)</label>
+            <input type="url" id="addonFile" placeholder="https://..." required>
         </div>
         
         <div class="btn-group-submit">
             <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">POST ADDON</button>
-            <button class="btn-cancel-edit" id="cancelEditBtn" onclick="resetForm()">CANCEL EDIT</button>
+            <button class="btn-cancel-edit" id="cancelEditBtn" onclick="resetForm()">CANCEL</button>
         </div>
     </div>
 
-    <!-- รายการแอดออน -->
+    <!-- Addon List -->
     <div class="addon-grid" id="addonList">
         <div class="empty-text">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div>
     </div>
 
-    <!-- ปุ่มเปลี่ยนหน้า -->
+    <!-- Pagination -->
     <div class="pagination" id="paginationControls" style="display: none;">
         <button class="page-btn" id="prevBtn" onclick="changePage(-1)">&lt; PREV</button>
         <span class="page-info" id="pageInfo">Page 1 of 1</span>
         <button class="page-btn" id="nextBtn" onclick="changePage(1)">NEXT &gt;</button>
-    </div>
-</div>
-
-<!-- Modal รหัสผ่าน -->
-<div class="modal-overlay" id="passwordModal">
-    <div class="modal-box">
-        <div class="modal-title">ADMIN ACCESS</div>
-        <div class="modal-subtitle">กรอกรหัสผ่านเพื่อเข้าสู่ระบบผู้ดูแล</div>
-        <input type="password" class="modal-input" id="passInput" placeholder="Password..." onkeyup="handleKey(event)">
-        <div class="modal-actions">
-            <button class="btn-cancel" onclick="closeModal()">ยกเลิก</button>
-            <button class="btn-confirm" onclick="checkPassword()">ยืนยัน</button>
-        </div>
     </div>
 </div>
 
@@ -465,19 +450,23 @@
     let editingAddonId = null;
 
     window.onload = function() {
-        // ผูกปุ่ม ADMIN เข้ากับฟังก์ชันเปิด Modal
-        document.getElementById('adminBtn').onclick = openModal;
         loadAddons();
     };
 
-    function openModal() {
-        document.getElementById('passwordModal').classList.add('active');
-        document.getElementById('passInput').focus();
-    }
+    function toggleAdminPanel() {
+        const loginBox = document.getElementById('adminLoginBox');
+        const adminForm = document.getElementById('adminForm');
 
-    function closeModal() {
-        document.getElementById('passwordModal').classList.remove('active');
-        document.getElementById('passInput').value = '';
+        if (adminForm.classList.contains('active')) {
+            // ถ้าเข้าสู่ระบบอยู่แล้ว ให้เลื่อนขึ้นไปที่ฟอร์ม
+            adminForm.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            // ถ้ายังไม่เข้าสู่ระบบ เปิด/ปิด ช่องใส่รหัส
+            loginBox.classList.toggle('active');
+            if (loginBox.classList.contains('active')) {
+                document.getElementById('passInput').focus();
+            }
+        }
     }
 
     function handleKey(e) {
@@ -487,9 +476,10 @@
     function checkPassword() {
         const pass = document.getElementById('passInput').value;
         if (pass === "black.1234") {
-            closeModal();
+            document.getElementById('adminLoginBox').classList.remove('active');
             document.getElementById('adminForm').classList.add('active');
             document.getElementById('mainContainer').classList.add('admin-mode');
+            document.getElementById('passInput').value = '';
         } else {
             alert("รหัสผ่านไม่ถูกต้อง!");
             document.getElementById('passInput').value = '';
@@ -581,7 +571,7 @@
         document.getElementById('addonImage').value = target.image;
         document.getElementById('addonFile').value = target.downloadUrl;
 
-        document.getElementById('formHeaderTitle').innerText = "EDIT ADDON";
+        document.getElementById('formHeaderTitle').innerText = "✏️ EDIT ADDON";
         document.getElementById('submitBtn').innerText = "UPDATE ADDON";
         document.getElementById('cancelEditBtn').style.display = "block";
 
@@ -625,7 +615,7 @@
         document.getElementById('addonImage').value = '';
         document.getElementById('addonFile').value = '';
 
-        document.getElementById('formHeaderTitle').innerText = "ADD NEW ADDON";
+        document.getElementById('formHeaderTitle').innerText = "⚡ ADD NEW ADDON";
         document.getElementById('submitBtn').innerText = "POST ADDON";
         document.getElementById('cancelEditBtn').style.display = "none";
     }
@@ -694,6 +684,4 @@
             const card = document.createElement('div');
             card.className = 'addon-card';
 
-            card.innerHTML = `
-                <div class="admin-controls">
-              
+    
