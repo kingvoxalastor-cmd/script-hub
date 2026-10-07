@@ -66,7 +66,7 @@
             color: #fff;
         }
 
-        /* Admin Login Box (In-page) */
+        /* Admin Login Box (In-page Always Ready) */
         .admin-login-box {
             background: #121212;
             border: 1px solid #ff003c;
@@ -199,7 +199,7 @@
             cursor: pointer;
         }
 
-        /* Categories Section */
+        /* Category Filter Tabs System */
         .category-section {
             margin-bottom: 18px;
         }
@@ -246,6 +246,7 @@
             position: relative;
         }
 
+        /* สัดส่วนรูปภาพ 16:9 สไตล์เกมมิ่ง */
         .addon-img-wrapper {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -376,14 +377,14 @@
     <!-- Header -->
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
-        <button class="admin-toggle-btn" onclick="showLoginBox()">ADMIN</button>
+        <button class="admin-toggle-btn" type="button" onclick="showLoginBox()">ADMIN</button>
     </div>
 
-    <!-- Admin Login Input Box (ช่องใส่รหัสผ่านหน้าหลักตามเดิม) -->
+    <!-- Admin Login Input Box (แสดงไว้ให้กรอกได้เลย ไม่ต้องรอกดปุ่ม) -->
     <div class="admin-login-box" id="adminLoginBox">
         <div class="login-row">
             <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน Admin เข้าสู่ระบบ..." onkeyup="handleKey(event)">
-            <button class="login-btn" onclick="checkPassword()">เข้าสู่ระบบ</button>
+            <button class="login-btn" type="button" onclick="checkPassword()">เข้าสู่ระบบ</button>
         </div>
     </div>
 
@@ -391,15 +392,15 @@
     <div class="admin-card" id="adminForm">
         <div class="card-title">
             <span id="formHeaderTitle">⚡ ADD NEW ADDON</span>
-            <button class="logout-btn" onclick="logoutAdmin()">LOGOUT</button>
+            <button class="logout-btn" type="button" onclick="logoutAdmin()">LOGOUT</button>
         </div>
 
-        <!-- เพิ่มหมวดหมู่ใหม่ -->
+        <!-- ช่องเพิ่มหมวดหมู่ใหม่ -->
         <div class="form-group" style="background: #181818; padding: 10px; border-radius: 8px; border: 1px solid #2a2a2a; margin-bottom: 14px;">
             <label style="color: #ff003c; font-weight: bold;">➕ เพิ่มหมวดหมู่ใหม่</label>
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="newCatInput" placeholder="เช่น: เอาชีวิตรอด, ผี, อาวุธ">
-                <button onclick="addCategory()" style="background: #333; color: #fff; border: none; padding: 0 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap;">เพิ่ม</button>
+                <button type="button" onclick="addCategory()" style="background: #333; color: #fff; border: none; padding: 0 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap;">เพิ่ม</button>
             </div>
         </div>
 
@@ -421,15 +422,15 @@
         </div>
         
         <div class="btn-group-submit">
-            <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">POST ADDON</button>
-            <button class="btn-cancel-edit" id="cancelEditBtn" onclick="resetForm()">CANCEL</button>
+            <button class="btn-submit" id="submitBtn" type="button" onclick="handleSubmit()">POST ADDON</button>
+            <button class="btn-cancel-edit" id="cancelEditBtn" type="button" onclick="resetForm()">CANCEL</button>
         </div>
     </div>
 
     <!-- Category Tabs Filter -->
     <div class="category-section">
         <div class="category-tabs" id="categoryTabs">
-            <button class="cat-tab active" onclick="filterCategory('ALL')">ALL</button>
+            <button class="cat-tab active" type="button" onclick="filterCategory('ALL')">ALL</button>
         </div>
     </div>
 
@@ -440,7 +441,7 @@
 
     <!-- Footer -->
     <div class="footer-admin">
-        <button class="footer-admin-btn" onclick="showLoginBox()">[ ADMIN LOGIN ]</button>
+        <button class="footer-admin-btn" type="button" onclick="showLoginBox()">[ ADMIN LOGIN ]</button>
     </div>
 </div>
 
@@ -458,7 +459,7 @@
     let editingAddonId = null;
 
     window.onload = function() {
-        loadData();
+        loadAddons();
     };
 
     function showLoginBox() {
@@ -492,7 +493,7 @@
         resetForm();
     }
 
-    function loadData() {
+    function loadAddons() {
         fetch(API_URL + '/latest', {
             method: 'GET',
             headers: {
@@ -517,11 +518,12 @@
             renderAddons();
         })
         .catch(err => {
-            console.error("Error loading data:", err);
+            console.error("Error loading addons:", err);
             document.getElementById('addonList').innerHTML = '<div class="empty-text">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ในขณะนี้</div>';
         });
     }
 
+    /* เพิ่มหมวดหมู่ใหม่ */
     function addCategory() {
         const input = document.getElementById('newCatInput');
         const catName = input.value.trim();
@@ -538,19 +540,21 @@
         }
     }
 
+    /* แสดงหมวดหมู่ด้านบนและใน Dropdown */
     function renderCategories() {
         const tabsWrap = document.getElementById('categoryTabs');
         const selectWrap = document.getElementById('addonCategory');
 
-        tabsWrap.innerHTML = `<button class="cat-tab ${currentCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">ALL</button>`;
+        tabsWrap.innerHTML = `<button class="cat-tab ${currentCategory === 'ALL' ? 'active' : ''}" type="button" onclick="filterCategory('ALL')">ALL</button>`;
         selectWrap.innerHTML = '';
 
         appData.categories.forEach(cat => {
-            tabsWrap.innerHTML += `<button class="cat-tab ${currentCategory === cat ? 'active' : ''}" onclick="filterCategory('${cat}')">${cat}</button>`;
+            tabsWrap.innerHTML += `<button class="cat-tab ${currentCategory === cat ? 'active' : ''}" type="button" onclick="filterCategory('${cat}')">${cat}</button>`;
             selectWrap.innerHTML += `<option value="${cat}">${cat}</option>`;
         });
     }
 
+    /* กรองหมวดหมู่ */
     function filterCategory(cat) {
         currentCategory = cat;
         renderCategories();
@@ -565,6 +569,7 @@
         }
     }
 
+    /* สร้างแอดออนใหม่ */
     async function uploadAddon() {
         const title = document.getElementById('addonTitle').value.trim();
         const category = document.getElementById('addonCategory').value;
@@ -617,6 +622,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    /* แก้ไขแอดออน */
     async function updateAddon() {
         const title = document.getElementById('addonTitle').value.trim();
         const category = document.getElementById('addonCategory').value;
@@ -659,36 +665,6 @@
         document.getElementById('cancelEditBtn').style.display = "none";
     }
 
+    /* ลบแอดออน */
     async function deleteAddon(id) {
-        if (confirm("ต้องการลบแอดออนนี้ใช่หรือไม่?")) {
-            appData.addons = appData.addons.filter(item => item.id !== id);
-
-            if (await syncToCloud(appData)) {
-                renderAddons();
-                alert("ลบแอดออนเรียบร้อยแล้ว");
-            }
-        }
-    }
-
-    async function syncToCloud(dataObj) {
-        try {
-            const res = await fetch(API_URL, {
-                method: 
-
-                    function checkPassword() {
-        const passInput = document.getElementById('passInput');
-        if (!passInput) return;
-        
-        const pass = passInput.value.trim(); // ตัดช่องว่างหน้า-หลังออก
-        
-        if (pass === "black.1234") {
-            document.getElementById('adminLoginBox').style.display = 'none';
-            document.getElementById('adminForm').classList.add('active');
-            document.getElementById('mainContainer').classList.add('admin-mode');
-            passInput.value = '';
-        } else {
-            alert("รหัสผ่านไม่ถูกต้อง! (รหัสคือ: black.1234)");
-            passInput.value = '';
-        }
-    }
-    
+        if (confirm("ต้องการลบแอ
