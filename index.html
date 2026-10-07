@@ -66,7 +66,7 @@
             color: #fff;
         }
 
-        /* Admin Login Box (In-page Always Ready) */
+        /* Admin Login Box */
         .admin-login-box {
             background: #121212;
             border: 1px solid #ff003c;
@@ -199,6 +199,28 @@
             cursor: pointer;
         }
 
+        /* Search Bar System */
+        .search-section {
+            margin-bottom: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #121212;
+            border: 1px solid #222;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: #ff003c;
+            box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+        }
+
         /* Category Filter Tabs System */
         .category-section {
             margin-bottom: 18px;
@@ -246,7 +268,6 @@
             position: relative;
         }
 
-        /* สัดส่วนรูปภาพ 16:9 สไตล์เกมมิ่ง */
         .addon-img-wrapper {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -350,7 +371,6 @@
             font-weight: 800;
         }
 
-        /* Footer Access */
         .footer-admin {
             margin-top: 30px;
             text-align: center;
@@ -380,7 +400,7 @@
         <button class="admin-toggle-btn" type="button" onclick="showLoginBox()">ADMIN</button>
     </div>
 
-    <!-- Admin Login Input Box (แสดงไว้ให้กรอกได้เลย ไม่ต้องรอกดปุ่ม) -->
+    <!-- Admin Login Input Box -->
     <div class="admin-login-box" id="adminLoginBox">
         <div class="login-row">
             <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน Admin เข้าสู่ระบบ..." onkeyup="handleKey(event)">
@@ -395,7 +415,6 @@
             <button class="logout-btn" type="button" onclick="logoutAdmin()">LOGOUT</button>
         </div>
 
-        <!-- ช่องเพิ่มหมวดหมู่ใหม่ -->
         <div class="form-group" style="background: #181818; padding: 10px; border-radius: 8px; border: 1px solid #2a2a2a; margin-bottom: 14px;">
             <label style="color: #ff003c; font-weight: bold;">➕ เพิ่มหมวดหมู่ใหม่</label>
             <div style="display: flex; gap: 8px;">
@@ -427,6 +446,11 @@
         </div>
     </div>
 
+    <!-- Search Bar Section -->
+    <div class="search-section">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 ค้นหาชื่อแอดออน..." oninput="handleSearch()">
+    </div>
+
     <!-- Category Tabs Filter -->
     <div class="category-section">
         <div class="category-tabs" id="categoryTabs">
@@ -456,6 +480,7 @@
     };
     
     let currentCategory = 'ALL';
+    let searchQuery = '';
     let editingAddonId = null;
 
     window.onload = function() {
@@ -503,10 +528,14 @@
         })
         .then(res => res.json())
         .then(data => {
-            if (data && data.record) {
-                appData = data.record;
-            } else if (Array.isArray(data)) {
+            if (Array.isArray(data)) {
                 appData.addons = data;
+            } else if (data && data.record) {
+                if (Array.isArray(data.record)) {
+                    appData.addons = data.record;
+                } else {
+                    appData = data.record;
+                }
             } else if (data && data.addons) {
                 appData = data;
             }
@@ -523,7 +552,6 @@
         });
     }
 
-    /* เพิ่มหมวดหมู่ใหม่ */
     function addCategory() {
         const input = document.getElementById('newCatInput');
         const catName = input.value.trim();
@@ -540,7 +568,6 @@
         }
     }
 
-    /* แสดงหมวดหมู่ด้านบนและใน Dropdown */
     function renderCategories() {
         const tabsWrap = document.getElementById('categoryTabs');
         const selectWrap = document.getElementById('addonCategory');
@@ -554,10 +581,14 @@
         });
     }
 
-    /* กรองหมวดหมู่ */
     function filterCategory(cat) {
         currentCategory = cat;
         renderCategories();
+        renderAddons();
+    }
+
+    function handleSearch() {
+        searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
         renderAddons();
     }
 
@@ -569,7 +600,6 @@
         }
     }
 
-    /* สร้างแอดออนใหม่ */
     async function uploadAddon() {
         const title = document.getElementById('addonTitle').value.trim();
         const category = document.getElementById('addonCategory').value;
@@ -622,7 +652,6 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* แก้ไขแอดออน */
     async function updateAddon() {
         const title = document.getElementById('addonTitle').value.trim();
         const category = document.getElementById('addonCategory').value;
@@ -644,27 +673,4 @@
             }
             return item;
         });
-
-        if (await syncToCloud(appData)) {
-            renderAddons();
-            resetForm();
-            alert("อัปเดตข้อมูลแอดออนเรียบร้อยแล้ว!");
-        }
-
-        submitBtn.disabled = false;
-    }
-
-    function resetForm() {
-        editingAddonId = null;
-        document.getElementById('addonTitle').value = '';
-        document.getElementById('addonImage').value = '';
-        document.getElementById('addonFile').value = '';
-
-        document.getElementById('formHeaderTitle').innerText = "⚡ ADD NEW ADDON";
-        document.getElementById('submitBtn').innerText = "POST ADDON";
-        document.getElementById('cancelEditBtn').style.display = "none";
-    }
-
-    /* ลบแอดออน */
-    async function deleteAddon(id) {
-        if (confirm("ต้องการลบแอ
+    
