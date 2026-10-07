@@ -139,6 +139,12 @@
             background: #d60032;
         }
 
+        .btn-submit:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
         /* Addon List */
         .addon-grid {
             display: flex;
@@ -334,11 +340,13 @@
             <label>ลิงก์ดาวน์โหลดแอดออน (MediaFire / Google Drive / Discord)</label>
             <input type="url" id="addonFile" placeholder="วางลิงก์ไฟล์..." required>
         </div>
-        <button class="btn-submit" onclick="uploadAddon()">POST ADDON</button>
+        <button class="btn-submit" id="submitBtn" onclick="uploadAddon()">POST ADDON</button>
     </div>
 
     <!-- รายการแอดออน -->
-    <div class="addon-grid" id="addonList"></div>
+    <div class="addon-grid" id="addonList">
+        <div class="empty-text">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div>
+    </div>
 </div>
 
 <!-- Modal รหัสผ่าน -->
@@ -355,15 +363,14 @@
 </div>
 
 <script>
+    const BIN_ID = '6ac4fd7eac6210605a193eb2';
+    const MASTER_KEY = '$2a$10$c050I32SC1yvzC7XK5SW1e-q3X3bW7I';
+    const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
     let addonsData = [];
 
-    // โหลดข้อมูลเมื่อเปิดหน้าเว็บ
     window.onload = function() {
-        const stored = localStorage.getItem('my_addons_list');
-        if (stored) {
-            addonsData = JSON.parse(stored);
-        }
-        renderAddons();
+        loadAddons();
     };
 
     function openModal() {
@@ -397,15 +404,43 @@
         document.getElementById('mainContainer').classList.remove('admin-mode');
     }
 
-    function uploadAddon() {
+    // ดึงข้อมูลจาก Cloud
+    function loadAddons() {
+        fetch(API_URL + '/latest', {
+            method: 'GET',
+            headers: {
+                'X-Master-Key': MASTER_KEY,
+                'X-Bin-Meta': 'false'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                addonsData = data;
+            } else {
+                addonsData = [];
+            }
+            renderAddons();
+        })
+        .catch(err => {
+            console.error("Error loading addons:", err);
+            document.getElementById('addonList').innerHTML = '<div class="empty-text">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ในขณะนี้</div>';
+        });
+    }
+
+    async function uploadAddon() {
         const title = document.getElementById('addonTitle').value.trim();
         const imgUrl = document.getElementById('addonImage').value.trim();
         const fileUrl = document.getElementById('addonFile').value.trim();
+        const submitBtn = document.getElementById('submitBtn');
 
         if (!title || !imgUrl || !fileUrl) {
             alert("กรุณากรอกข้อมูลให้ครบทุกช่อง!");
             return;
         }
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "UPLOADING...";
 
         const newAddon = {
             id: Date.now(),
@@ -414,26 +449,59 @@
             downloadUrl: fileUrl
         };
 
-        addonsData.unshift(newAddon);
-        saveAndRender();
+        const updatedList = [newAddon, ...addonsData];
 
-        // ล้างฟอร์ม
-        document.getElementById('addonTitle').value = '';
-        document.getElementById('addonImage').value = '';
-        document.getElementById('addonFile').value = '';
-        alert("โพสต์แอดออนสำเร็จ!");
-    }
+        try {
+            const res = await fetch(API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': MASTER_KEY
+                },
+                body: JSON.stringify(updatedList)
+            });
 
-    function deleteAddon(id) {
-        if (confirm("ต้องการลบแอดออนนี้ใช่หรือไม่?")) {
-            addonsData = addonsData.filter(item => item.id !== id);
-            saveAndRender();
+            if (res.ok) {
+                addonsData = updatedList;
+                renderAddons();
+                document.getElementById('addonTitle').value = '';
+                document.getElementById('addonImage').value = '';
+                document.getElementById('addonFile').value = '';
+                alert("โพสต์แอดออนสำเร็จ! คนอื่นสามารถมองเห็นได้แล้วครับ");
+            } else {
+                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง");
+            }
+        } catch (err) {
+            alert("ไม่สามารถเชื่อมต่อกับ Cloud ได้");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "POST ADDON";
         }
     }
 
-    function saveAndRender() {
-        localStorage.setItem('my_addons_list', JSON.stringify(addonsData));
-        renderAddons();
+    async function deleteAddon(id) {
+        if (confirm("ต้องการลบแอดออนนี้ใช่หรือไม่?")) {
+            const filteredList = addonsData.filter(item => item.id !== id);
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': MASTER_KEY
+                    },
+                    body: JSON.stringify(filteredList)
+                });
+
+                if (res.ok) {
+                    addonsData = filteredList;
+                    renderAddons();
+                    alert("ลบแอดออนเรียบร้อยแล้ว");
+                }
+            } catch (err) {
+                alert("เกิดข้อผิดพลาดในการลบข้อมูล");
+            }
+        }
     }
 
     function renderAddons() {
@@ -441,7 +509,7 @@
         list.innerHTML = '';
 
         if (addonsData.length === 0) {
-            list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในขณะนี้ (เข้าโหมด ADMIN เพื่อเพิ่มแอดออน)</div>';
+            list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในขณะนี้</div>';
             return;
         }
 
@@ -476,4 +544,5 @@
 </script>
 
 </body>
-</html>
+    </html>
+    
