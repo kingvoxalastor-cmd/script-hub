@@ -66,23 +66,38 @@
             color: #fff;
         }
 
-        /* Admin Login Box (In-page Always Ready) */
-        .admin-login-box {
-            background: #121212;
-            border: 1px solid #ff003c;
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.15);
+        /* Admin Login Modal (Pop-up Window) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        .login-row {
-            display: flex;
-            gap: 8px;
+        .modal-box {
+            background: #121212;
+            border: 1px solid #ff003c;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ff003c;
+            margin-bottom: 12px;
         }
 
         .login-input {
-            flex: 1;
+            width: 100%;
             padding: 10px 12px;
             background: #1a1a1a;
             border: 1px solid #333;
@@ -90,6 +105,7 @@
             color: #fff;
             font-size: 13px;
             outline: none;
+            margin-bottom: 12px;
         }
 
         .login-input:focus {
@@ -97,13 +113,23 @@
         }
 
         .login-btn {
+            width: 100%;
             background: #ff003c;
             color: #fff;
             border: none;
-            padding: 0 16px;
+            padding: 10px;
             border-radius: 6px;
             font-weight: 700;
             font-size: 13px;
+            cursor: pointer;
+        }
+
+        .cancel-modal-btn {
+            background: transparent;
+            color: #888;
+            border: none;
+            font-size: 12px;
+            margin-top: 10px;
             cursor: pointer;
         }
 
@@ -143,7 +169,7 @@
             font-size: 12px;
         }
 
-        input[type="text"], input[type="url"] {
+        input[type="text"], input[type="url"], select {
             width: 100%;
             padding: 11px;
             background: #181818;
@@ -154,7 +180,7 @@
             outline: none;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: #ff003c;
         }
 
@@ -199,6 +225,38 @@
             cursor: pointer;
         }
 
+        /* Categories Section */
+        .category-section {
+            margin-bottom: 18px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .cat-tab {
+            background: #121212;
+            border: 1px solid #222;
+            color: #888;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cat-tab.active {
+            background: rgba(255, 0, 60, 0.15);
+            border-color: #ff003c;
+            color: #ff003c;
+        }
+
         /* Addon Grid Layout */
         .addon-grid {
             display: flex;
@@ -214,7 +272,6 @@
             position: relative;
         }
 
-        /* สัดส่วนรูปภาพ 16:9 สไตล์เกมมิ่ง */
         .addon-img-wrapper {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -231,6 +288,15 @@
 
         .addon-content {
             padding: 16px;
+        }
+
+        .addon-category-tag {
+            font-size: 10px;
+            font-weight: 800;
+            color: #ff003c;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
         .addon-title {
@@ -336,14 +402,16 @@
     <!-- Header -->
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
-        <button class="admin-toggle-btn" onclick="showLoginBox()">ADMIN</button>
+        <button class="admin-toggle-btn" onclick="openLoginModal()">ADMIN</button>
     </div>
 
-    <!-- Admin Login Input Box (แสดงไว้ให้กรอกได้เลย ไม่ต้องรอกดปุ่ม) -->
-    <div class="admin-login-box" id="adminLoginBox">
-        <div class="login-row">
-            <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน Admin เข้าสู่ระบบ..." onkeyup="handleKey(event)">
+    <!-- Admin Login Modal (Pop-up Window) -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <div class="modal-title">🔐 เข้าสู่ระบบ ADMIN</div>
+            <input type="password" class="login-input" id="passInput" placeholder="กรอกรหัสผ่าน..." onkeyup="handleKey(event)">
             <button class="login-btn" onclick="checkPassword()">เข้าสู่ระบบ</button>
+            <button class="cancel-modal-btn" onclick="closeLoginModal()">ยกเลิก</button>
         </div>
     </div>
 
@@ -353,9 +421,23 @@
             <span id="formHeaderTitle">⚡ ADD NEW ADDON</span>
             <button class="logout-btn" onclick="logoutAdmin()">LOGOUT</button>
         </div>
+
+        <!-- เพิ่มหมวดหมู่ใหม่ -->
+        <div class="form-group" style="background: #181818; padding: 10px; border-radius: 8px; border: 1px solid #2a2a2a; margin-bottom: 14px;">
+            <label style="color: #ff003c; font-weight: bold;">➕ เพิ่มหมวดหมู่ใหม่</label>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="newCatInput" placeholder="เช่น: เอาชีวิตรอด, ผี, อาวุธ">
+                <button onclick="addCategory()" style="background: #333; color: #fff; border: none; padding: 0 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap;">เพิ่ม</button>
+            </div>
+        </div>
+
         <div class="form-group">
             <label>ชื่อแอดออน</label>
             <input type="text" id="addonTitle" placeholder="เช่น: CARRY MORE Add-On v1.0" required>
+        </div>
+        <div class="form-group">
+            <label>หมวดหมู่แอดออน</label>
+            <select id="addonCategory"></select>
         </div>
         <div class="form-group">
             <label>ลิงก์รูปภาพตัวอย่าง (URL)</label>
@@ -372,6 +454,13 @@
         </div>
     </div>
 
+    <!-- Category Tabs Filter -->
+    <div class="category-section">
+        <div class="category-tabs" id="categoryTabs">
+            <button class="cat-tab active" onclick="filterCategory('ALL')">ALL</button>
+        </div>
+    </div>
+
     <!-- Addon List -->
     <div class="addon-grid" id="addonList">
         <div class="empty-text">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div>
@@ -379,7 +468,7 @@
 
     <!-- Footer -->
     <div class="footer-admin">
-        <button class="footer-admin-btn" onclick="showLoginBox()">[ ADMIN LOGIN ]</button>
+        <button class="footer-admin-btn" onclick="openLoginModal()">[ ADMIN LOGIN ]</button>
     </div>
 </div>
 
@@ -388,18 +477,26 @@
     const MASTER_KEY = '$2a$10$ecvjzzTvc7XkSLw9/7L2gukhIW/w4H.PRNViTUYJoDHgaMRT1Qo.q';
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    let addonsData = [];
+    let appData = {
+        categories: ['เอาชีวิตรอด', 'ผี', 'อาวุธ'],
+        addons: []
+    };
+    
+    let currentCategory = 'ALL';
     let editingAddonId = null;
 
     window.onload = function() {
-        loadAddons();
+        loadData();
     };
 
-    function showLoginBox() {
-        const box = document.getElementById('adminLoginBox');
-        box.style.display = 'block';
+    function openLoginModal() {
+        document.getElementById('loginModal').style.display = 'flex';
         document.getElementById('passInput').focus();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('passInput').value = '';
     }
 
     function handleKey(e) {
@@ -409,10 +506,10 @@
     function checkPassword() {
         const pass = document.getElementById('passInput').value;
         if (pass === "black.1234") {
-            document.getElementById('adminLoginBox').style.display = 'none';
+            closeLoginModal();
             document.getElementById('adminForm').classList.add('active');
             document.getElementById('mainContainer').classList.add('admin-mode');
-            document.getElementById('passInput').value = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             alert("รหัสผ่านไม่ถูกต้อง!");
             document.getElementById('passInput').value = '';
@@ -422,11 +519,10 @@
     function logoutAdmin() {
         document.getElementById('adminForm').classList.remove('active');
         document.getElementById('mainContainer').classList.remove('admin-mode');
-        document.getElementById('adminLoginBox').style.display = 'block';
         resetForm();
     }
 
-    function loadAddons() {
+    function loadData() {
         fetch(API_URL + '/latest', {
             method: 'GET',
             headers: {
@@ -436,21 +532,59 @@
         })
         .then(res => res.json())
         .then(data => {
-            if (Array.isArray(data)) {
-                addonsData = data;
-            } else if (data && Array.isArray(data.record)) {
-                addonsData = data.record;
-            } else if (data && Array.isArray(data.data)) {
-                addonsData = data.data;
-            } else {
-                addonsData = [];
+            if (data && data.record) {
+                appData = data.record;
+            } else if (Array.isArray(data)) {
+                appData.addons = data;
+            } else if (data && data.addons) {
+                appData = data;
             }
+
+            if (!appData.categories) appData.categories = ['เอาชีวิตรอด', 'ผี', 'อาวุธ'];
+            if (!appData.addons) appData.addons = [];
+
+            renderCategories();
             renderAddons();
         })
         .catch(err => {
-            console.error("Error loading addons:", err);
+            console.error("Error loading data:", err);
             document.getElementById('addonList').innerHTML = '<div class="empty-text">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ในขณะนี้</div>';
         });
+    }
+
+    function addCategory() {
+        const input = document.getElementById('newCatInput');
+        const catName = input.value.trim();
+        if (!catName) return;
+
+        if (!appData.categories.includes(catName)) {
+            appData.categories.push(catName);
+            input.value = '';
+            syncToCloud(appData);
+            renderCategories();
+            alert(`เพิ่มหมวดหมู่ "${catName}" เรียบร้อยแล้ว!`);
+        } else {
+            alert("มีหมวดหมู่นี้อยู่แล้ว!");
+        }
+    }
+
+    function renderCategories() {
+        const tabsWrap = document.getElementById('categoryTabs');
+        const selectWrap = document.getElementById('addonCategory');
+
+        tabsWrap.innerHTML = `<button class="cat-tab ${currentCategory === 'ALL' ? 'active' : ''}" onclick="filterCategory('ALL')">ALL</button>`;
+        selectWrap.innerHTML = '';
+
+        appData.categories.forEach(cat => {
+            tabsWrap.innerHTML += `<button class="cat-tab ${currentCategory === cat ? 'active' : ''}" onclick="filterCategory('${cat}')">${cat}</button>`;
+            selectWrap.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
+    }
+
+    function filterCategory(cat) {
+        currentCategory = cat;
+        renderCategories();
+        renderAddons();
     }
 
     function handleSubmit() {
@@ -463,6 +597,7 @@
 
     async function uploadAddon() {
         const title = document.getElementById('addonTitle').value.trim();
+        const category = document.getElementById('addonCategory').value;
         const imgUrl = document.getElementById('addonImage').value.trim();
         const fileUrl = document.getElementById('addonFile').value.trim();
         const submitBtn = document.getElementById('submitBtn');
@@ -478,14 +613,14 @@
         const newAddon = {
             id: Date.now(),
             title: title,
+            category: category,
             image: imgUrl,
             downloadUrl: fileUrl
         };
 
-        const updatedList = [newAddon, ...addonsData];
+        appData.addons.unshift(newAddon);
 
-        if (await syncToCloud(updatedList)) {
-            addonsData = updatedList;
+        if (await syncToCloud(appData)) {
             renderAddons();
             resetForm();
             alert("โพสต์แอดออนสำเร็จ!");
@@ -496,11 +631,12 @@
     }
 
     function startEdit(id) {
-        const target = addonsData.find(item => item.id === id);
+        const target = appData.addons.find(item => item.id === id);
         if (!target) return;
 
         editingAddonId = id;
         document.getElementById('addonTitle').value = target.title;
+        document.getElementById('addonCategory').value = target.category || appData.categories[0];
         document.getElementById('addonImage').value = target.image;
         document.getElementById('addonFile').value = target.downloadUrl;
 
@@ -513,6 +649,7 @@
 
     async function updateAddon() {
         const title = document.getElementById('addonTitle').value.trim();
+        const category = document.getElementById('addonCategory').value;
         const imgUrl = document.getElementById('addonImage').value.trim();
         const fileUrl = document.getElementById('addonFile').value.trim();
         const submitBtn = document.getElementById('submitBtn');
@@ -525,15 +662,14 @@
         submitBtn.disabled = true;
         submitBtn.innerText = "UPDATING...";
 
-        const updatedList = addonsData.map(item => {
+        appData.addons = appData.addons.map(item => {
             if (item.id === editingAddonId) {
-                return { ...item, title: title, image: imgUrl, downloadUrl: fileUrl };
+                return { ...item, title: title, category: category, image: imgUrl, downloadUrl: fileUrl };
             }
             return item;
         });
 
-        if (await syncToCloud(updatedList)) {
-            addonsData = updatedList;
+        if (await syncToCloud(appData)) {
             renderAddons();
             resetForm();
             alert("อัปเดตข้อมูลแอดออนเรียบร้อยแล้ว!");
@@ -545,92 +681,4 @@
     function resetForm() {
         editingAddonId = null;
         document.getElementById('addonTitle').value = '';
-        document.getElementById('addonImage').value = '';
-        document.getElementById('addonFile').value = '';
-
-        document.getElementById('formHeaderTitle').innerText = "⚡ ADD NEW ADDON";
-        document.getElementById('submitBtn').innerText = "POST ADDON";
-        document.getElementById('cancelEditBtn').style.display = "none";
-    }
-
-    async function deleteAddon(id) {
-        if (confirm("ต้องการลบแอดออนนี้ใช่หรือไม่?")) {
-            const filteredList = addonsData.filter(item => item.id !== id);
-
-            if (await syncToCloud(filteredList)) {
-                addonsData = filteredList;
-                renderAddons();
-                alert("ลบแอดออนเรียบร้อยแล้ว");
-            }
-        }
-    }
-
-    async function syncToCloud(dataList) {
-        try {
-            const res = await fetch(API_URL, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': MASTER_KEY
-                },
-                body: JSON.stringify(dataList)
-            });
-
-            if (res.ok) {
-                return true;
-            } else {
-                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูลไปยัง Cloud");
-                return false;
-            }
-        } catch (err) {
-            alert("ไม่สามารถเชื่อมต่อกับ Cloud ได้");
-            return false;
-        }
-    }
-
-    function renderAddons() {
-        const list = document.getElementById('addonList');
-        list.innerHTML = '';
-
-        if (!Array.isArray(addonsData) || addonsData.length === 0) {
-            list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในขณะนี้</div>';
-            return;
-        }
-
-        addonsData.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'addon-card';
-
-            card.innerHTML = `
-                <div class="admin-controls">
-                    <button class="edit-btn" onclick="startEdit(${item.id})">EDIT</button>
-                    <button class="delete-btn" onclick="deleteAddon(${item.id})">DELETE</button>
-                </div>
-                <div class="addon-img-wrapper">
-                    <img src="${escapeHtml(item.image)}" class="addon-img" alt="preview" onerror="this.src='https://via.placeholder.com/600x337/181818/ffffff?text=Image+Not+Found'">
-                </div>
-                <div class="addon-content">
-                    <div class="addon-title">${escapeHtml(item.title)}</div>
-                    <a href="${escapeHtml(item.downloadUrl)}" target="_blank" class="btn-download">
-                        DOWNLOAD FILE
-                    </a>
-                </div>
-            `;
-
-            list.appendChild(card);
-        });
-    }
-
-    function escapeHtml(text) {
-        if (!text) return '';
-        return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-</script>
-
-</body>
-</html>
+        doc
