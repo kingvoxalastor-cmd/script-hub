@@ -54,7 +54,7 @@
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 6px;
             transition: 0.2s;
         }
@@ -178,11 +178,18 @@
             position: relative;
         }
 
+        /* ปรับรูปภาพให้แสดงผลแบบ 16:9 สมบูรณ์สวยงาม */
+        .addon-img-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+
         .addon-img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
-            background: #1a1a1a;
             display: block;
         }
 
@@ -393,7 +400,7 @@
 <div class="container" id="mainContainer">
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
-        <button class="admin-lock-btn" onclick="openModal()">ADMIN</button>
+        <button class="admin-lock-btn" id="adminBtn">ADMIN</button>
     </div>
 
     <!-- ฟอร์มลง/แก้ไข แอดออน (Admin) -->
@@ -404,7 +411,7 @@
         </div>
         <div class="form-group">
             <label>ชื่อแอดออน</label>
-            <input type="text" id="addonTitle" placeholder="เช่น: Déesse UI v1.3.95" required>
+            <input type="text" id="addonTitle" placeholder="เช่น: CARRY MORE Add-On" required>
         </div>
         <div class="form-group">
             <label>ลิงก์รูปภาพตัวอย่าง (URL)</label>
@@ -458,6 +465,8 @@
     let editingAddonId = null;
 
     window.onload = function() {
+        // ผูกปุ่ม ADMIN เข้ากับฟังก์ชันเปิด Modal
+        document.getElementById('adminBtn').onclick = openModal;
         loadAddons();
     };
 
@@ -503,9 +512,10 @@
         })
         .then(res => res.json())
         .then(data => {
-            // รองรับทั้งแบบ array ตรงๆ และแบบมีโครงสร้าง { status, data }
             if (Array.isArray(data)) {
                 addonsData = data;
+            } else if (data && Array.isArray(data.record)) {
+                addonsData = data.record;
             } else if (data && Array.isArray(data.data)) {
                 addonsData = data.data;
             } else {
@@ -555,7 +565,7 @@
             currentPage = 1;
             renderAddons();
             resetForm();
-            alert("โพสต์แอดออนสำเร็จ! แฟนและคนอื่นเปิดเว็บมาจะเห็นแล้วครับ");
+            alert("โพสต์แอดออนสำเร็จ!");
         }
 
         submitBtn.disabled = false;
@@ -666,7 +676,7 @@
         const paginationControls = document.getElementById('paginationControls');
         list.innerHTML = '';
 
-        if (addonsData.length === 0) {
+        if (!Array.isArray(addonsData) || addonsData.length === 0) {
             list.innerHTML = '<div class="empty-text">ยังไม่มีแอดออนในขณะนี้</div>';
             paginationControls.style.display = 'none';
             return;
@@ -686,7 +696,4 @@
 
             card.innerHTML = `
                 <div class="admin-controls">
-                    <button class="edit-btn" onclick="startEdit(${item.id})">EDIT</button>
-                    <button class="delete-btn" onclick="deleteAddon(${item.id})">DELETE</button>
-                </div>
-                <img src="${escapeHtml(item.image)}" class="addon-img" alt="preview" onerror="this.src='https://via.
+              
