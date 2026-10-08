@@ -1,669 +1,350 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADDON HUB - Minecraft Addons Community</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0b0c10;
-            --card-bg: #12141c;
-            --accent-red: #ff0055;
-            --accent-red-glow: rgba(255, 0, 85, 0.4);
-            --text-main: #ffffff;
-            --text-sub: #a0a5b5;
-            --border-color: #1f2330;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADDON HUB - ศูนย์รวมแอดออน Minecraft</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0b10;--card:#12141c;--card2:#181b26;--red:#ff0055;--red2:#ff5c8a;--glow:rgba(255,0,85,.4);--text:#fff;--sub:#a0a5b5;--line:#1f2330}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Kanit',sans-serif;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);min-height:100vh;
+background-image:radial-gradient(circle at 20% 0%,rgba(255,0,85,.12),transparent 55%),radial-gradient(circle at 90% 30%,rgba(120,60,255,.08),transparent 50%);background-attachment:fixed}
+button{font-family:inherit}
+.wrap{width:100%;max-width:1100px;margin:0 auto;padding:0 14px}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Kanit', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+/* Navbar */
+.nav{position:sticky;top:0;z-index:50;background:rgba(10,11,16,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-size:22px;font-weight:800;letter-spacing:2px;cursor:pointer;user-select:none}
+.logo span{color:var(--red);text-shadow:0 0 14px var(--glow)}
+.nav-btn{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--red),#c2003f);color:#fff;border:none;padding:9px 18px;border-radius:30px;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 4px 16px var(--glow);transition:transform .2s}
+.nav-btn:hover{transform:translateY(-2px)}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px 12px;
-            background-image: radial-gradient(circle at 50% 0%, rgba(255, 0, 85, 0.08) 0%, transparent 70%);
-        }
+/* Hero */
+.hero{text-align:center;padding:42px 0 26px}
+.hero-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;color:var(--red2);border:1px solid rgba(255,0,85,.4);background:rgba(255,0,85,.08);padding:5px 14px;border-radius:30px;margin-bottom:16px}
+.hero h2{font-size:clamp(28px,6vw,46px);font-weight:800;line-height:1.2}
+.hero h2 em{font-style:normal;background:linear-gradient(90deg,var(--red),#ff9a5c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--sub);font-size:14px;margin:12px auto 24px;max-width:480px}
+.hero-search{display:flex;align-items:center;gap:10px;width:100%;max-width:520px;margin:0 auto;background:var(--card);border:1px solid var(--line);color:var(--sub);padding:15px 20px;border-radius:50px;font-size:14px;cursor:pointer;text-align:left;transition:all .25s}
+.hero-search:hover{border-color:var(--red);box-shadow:0 0 24px var(--glow);color:#fff}
+.hero-search .go{margin-left:auto;background:var(--red);color:#fff;padding:6px 16px;border-radius:30px;font-weight:800;font-size:12px}
+.stats{display:flex;justify-content:center;gap:12px;margin-top:26px;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 22px;min-width:120px}
+.stat b{display:block;font-size:22px;color:var(--red)}
+.stat small{color:var(--sub);font-size:12px}
 
-        .container {
-            width: 100%;
-            max-width: 580px;
-            padding-bottom: 90px;
-        }
+/* Section */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:22px 0 14px}
+.sec-head h3{font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+.sec-head h3::before{content:'';width:4px;height:20px;background:var(--red);border-radius:4px;box-shadow:0 0 10px var(--glow)}
+.sec-head small{color:var(--sub);font-size:12px}
+.tabs{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:var(--card);border:1px solid var(--line);color:var(--sub);padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;transition:all .2s}
+.tab:hover{color:#fff}
+.tab.active{background:rgba(255,0,85,.15);border-color:var(--red);color:var(--red);box-shadow:0 0 12px var(--glow)}
 
-        /* Header Design */
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-            position: relative;
-        }
+/* Grid + cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:90px}
+@media(max-width:560px){.grid{grid-template-columns:1fr 1fr;gap:12px}.card-body{padding:12px!important}.card-title{font-size:13px!important}.btn-dl{padding:9px!important;font-size:12px!important}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s}
+.card:hover{border-color:var(--red);transform:translateY(-4px);box-shadow:0 10px 30px rgba(255,0,85,.15)}
+.card-img{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,#181b26,#10121a);position:relative;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+.card:hover .card-img img{transform:scale(1.06)}
+.badge{position:absolute;left:10px;top:10px;background:rgba(10,11,16,.8);backdrop-filter:blur(6px);border:1px solid rgba(255,0,85,.5);color:var(--red2);font-size:10px;font-weight:800;padding:3px 10px;border-radius:30px;letter-spacing:.5px}
+.new{position:absolute;right:10px;top:10px;background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:3px 10px;border-radius:30px}
+.card-body{padding:16px;display:flex;flex-direction:column;flex:1}
+.card-title{font-size:15px;font-weight:800;line-height:1.4;margin-bottom:14px;flex:1}
+.btn-dl{display:flex;justify-content:center;align-items:center;gap:6px;width:100%;padding:11px;background:rgba(255,0,85,.1);color:var(--red);border:1px solid var(--red);text-decoration:none;font-weight:800;font-size:13px;border-radius:10px;transition:all .2s}
+.btn-dl:hover{background:var(--red);color:#fff;box-shadow:0 4px 18px var(--glow)}
+.empty{grid-column:1/-1;text-align:center;color:var(--sub);padding:60px 20px;font-size:14px;background:var(--card);border-radius:16px;border:1px dashed var(--line)}
 
-        .header h1 {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+/* Admin controls on card */
+.ctrl{display:none;position:absolute;left:10px;bottom:auto;top:44px;gap:6px;z-index:5}
+body.admin .ctrl{display:flex}
+.b-edit{background:rgba(255,170,0,.95);color:#000;border:none;padding:5px 11px;border-radius:6px;font-size:11px;font-weight:800;cursor:pointer}
+.b-del{background:rgba(255,0,85,.95);color:#fff;border:none;padding:5px 11px;border-radius:6px;font-size:11px;font-weight:800;cursor:pointer}
 
-        .header h1 span {
-            color: var(--accent-red);
-            text-shadow: 0 0 15px var(--accent-red-glow);
-        }
+/* Search page */
+#searchView{display:none}
+.sbar{position:sticky;top:60px;z-index:40;background:rgba(10,11,16,.92);backdrop-filter:blur(14px);padding:14px 0;border-bottom:1px solid var(--line)}
+.sbar-in{display:flex;gap:10px;align-items:center}
+.back{background:var(--card);border:1px solid var(--line);color:#fff;width:46px;height:46px;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;transition:all .2s}
+.back:hover{border-color:var(--red);color:var(--red)}
+.sinput{flex:1;padding:14px 20px;background:var(--card);border:1px solid var(--red);border-radius:50px;color:#fff;font-size:15px;outline:none;box-shadow:0 0 18px var(--glow)}
+.sinfo{color:var(--sub);font-size:12px;margin:16px 0 14px}
 
-        .header p {
-            font-size: 12px;
-            color: var(--text-sub);
-            margin-top: 4px;
-        }
+/* Admin panel */
+.admin{display:none;margin:20px 0 6px;background:var(--card);border:1px solid var(--red);border-radius:18px;padding:20px;box-shadow:0 4px 30px var(--glow)}
+.admin.active{display:block}
+.admin-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;color:var(--red);font-weight:800;font-size:16px}
+.logout{background:transparent;color:var(--sub);border:1px solid var(--line);padding:4px 12px;border-radius:6px;font-size:11px;cursor:pointer}
+.box{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+.box h4{font-size:13px;color:var(--red);margin-bottom:10px}
+.fg{margin-bottom:12px}
+label{display:block;margin-bottom:6px;color:var(--sub);font-size:12px;font-weight:600}
+input[type=text],input[type=url],input[type=password],select{width:100%;padding:12px;background:var(--card2);border:1px solid var(--line);border-radius:10px;color:#fff;font-size:13px;outline:none}
+.box input[type=text]{background:#10121a}
+input:focus,select:focus{border-color:var(--red)}
+.row{display:flex;gap:8px}
+.btn{border:none;border-radius:10px;padding:12px 18px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn-red{background:var(--red);color:#fff}
+.btn-gray{background:#282c3c;color:#fff}
+.btn-cancel{background:#1f2330;color:var(--sub);display:none}
+.catlist{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.catrow{display:flex;align-items:center;gap:8px;background:#10121a;border:1px solid var(--line);border-radius:10px;padding:8px 8px 8px 14px}
+.catrow .nm{flex:1;font-size:13px;font-weight:600;word-break:break-word}
+.catrow .ct{font-size:11px;color:var(--sub);margin-right:4px}
+.catrow button{border:none;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:800;cursor:pointer}
+.c-ren{background:rgba(255,170,0,.95);color:#000}
+.c-del{background:rgba(255,0,85,.95);color:#fff}
 
-        /* Floating Admin Button */
-        .floating-admin-btn {
-            position: fixed;
-            bottom: 24px;
-            right: 20px;
-            background: var(--card-bg);
-            border: 2px solid var(--accent-red);
-            color: var(--accent-red);
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            padding: 12px 22px;
-            border-radius: 50px;
-            box-shadow: 0 6px 20px var(--accent-red-glow);
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+/* Floating admin */
+.fab{position:fixed;bottom:22px;right:18px;z-index:9999;background:var(--card);border:2px solid var(--red);color:var(--red);font-size:13px;font-weight:800;cursor:pointer;padding:12px 22px;border-radius:50px;box-shadow:0 6px 20px var(--glow);transition:all .25s}
+.fab:hover{background:var(--red);color:#fff}
 
-        .floating-admin-btn:hover {
-            background: var(--accent-red);
-            color: #fff;
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.6);
-        }
+/* Modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:100000;justify-content:center;align-items:center;padding:20px}
+.modal.active{display:flex}
+.mbox{background:var(--card);border:1px solid var(--red);border-radius:16px;padding:28px 20px;width:100%;max-width:360px;box-shadow:0 0 40px var(--glow);text-align:center}
+.mbox h3{color:var(--red);font-size:20px;font-weight:800;margin-bottom:6px}
+.mbox p{font-size:13px;color:var(--sub);margin-bottom:18px}
+.mbox input{text-align:center;margin-bottom:14px}
 
-        /* Modal Popup */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 100000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex !important;
-        }
-
-        .modal-box {
-            background: var(--card-bg);
-            border: 1px solid var(--accent-red);
-            border-radius: 16px;
-            padding: 28px 20px;
-            width: 100%;
-            max-width: 360px;
-            box-shadow: 0 0 40px var(--accent-red-glow);
-            text-align: center;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--accent-red);
-            margin-bottom: 6px;
-        }
-
-        .modal-sub {
-            font-size: 13px;
-            color: var(--text-sub);
-            margin-bottom: 20px;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 12px 14px;
-            background: #181b26;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .modal-input:focus {
-            border-color: var(--accent-red);
-        }
-
-        .modal-btn-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .modal-btn-login {
-            flex: 2;
-            background: var(--accent-red);
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .modal-btn-close {
-            flex: 1;
-            background: #1f2330;
-            color: var(--text-sub);
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* Admin Form Card */
-        .admin-card {
-            display: none;
-            background: var(--card-bg);
-            border: 1px solid var(--accent-red);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 30px var(--accent-red-glow);
-        }
-
-        .admin-card.active {
-            display: block;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            color: var(--accent-red);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--text-sub);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        input[type="text"], input[type="url"], select {
-            width: 100%;
-            padding: 12px;
-            background: #181b26;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 13px;
-            outline: none;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-red);
-        }
-
-        .btn-group-submit {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .btn-submit {
-            flex: 2;
-            padding: 12px;
-            background: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .btn-cancel-edit {
-            flex: 1;
-            padding: 12px;
-            background: #1f2330;
-            color: var(--text-sub);
-            border: none;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            display: none;
-        }
-
-        .logout-btn {
-            background: transparent;
-            color: var(--text-sub);
-            border: 1px solid var(--border-color);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        /* Search Section */
-        .search-section {
-            margin-bottom: 16px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 18px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent-red);
-            box-shadow: 0 0 15px var(--accent-red-glow);
-        }
-
-        /* Category Filter Tabs */
-        .category-section {
-            margin-bottom: 22px;
-        }
-
-        .category-tabs {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 6px;
-            scrollbar-width: none;
-        }
-
-        .category-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .cat-tab {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-sub);
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .cat-tab.active {
-            background: rgba(255, 0, 85, 0.15);
-            border-color: var(--accent-red);
-            color: var(--accent-red);
-            box-shadow: 0 0 12px var(--accent-red-glow);
-        }
-
-        /* Addon List Grid */
-        .addon-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .addon-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.25s ease, border-color 0.25s ease;
-        }
-
-        .addon-card:hover {
-            border-color: var(--accent-red);
-            transform: translateY(-2px);
-        }
-
-        .addon-img-wrapper {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #181b26;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .addon-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .addon-card:hover .addon-img {
-            transform: scale(1.03);
-        }
-
-        .addon-content {
-            padding: 18px;
-        }
-
-        .addon-category-tag {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--accent-red);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-
-        .addon-title {
-            font-size: 17px;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-
-        .btn-download {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 0, 85, 0.1);
-            color: var(--accent-red);
-            border: 1px solid var(--accent-red);
-            text-align: center;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 13px;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-download:hover {
-            background: var(--accent-red);
-            color: #ffffff;
-            box-shadow: 0 4px 20px var(--accent-red-glow);
-        }
-
-        .empty-text {
-            text-align: center;
-            color: var(--text-sub);
-            padding: 60px 20px;
-            font-size: 14px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px dashed var(--border-color);
-        }
-
-        /* Admin Action Buttons */
-        .admin-controls {
-            display: none;
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            gap: 6px;
-            z-index: 10;
-        }
-
-        .admin-mode .admin-controls {
-            display: flex;
-        }
-
-        .edit-btn {
-            background: rgba(255, 170, 0, 0.9);
-            color: #000;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: 800;
-        }
-
-        .delete-btn {
-            background: rgba(255, 0, 85, 0.9);
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: 800;
-        }
-    </style>
+footer{text-align:center;color:var(--sub);font-size:12px;padding:10px 0 100px}
+</style>
 </head>
 <body>
 
-<!-- Floating Admin Button -->
-<button class="floating-admin-btn" id="adminFloatingBtn" type="button" onclick="handleAdminButtonClick()">
-    ⚡ ADMIN
-</button>
+<button class="fab" id="fab" type="button">⚡ ADMIN</button>
 
-<!-- UI Modal Log in -->
-<div class="modal-overlay" id="adminLoginModal">
-    <div class="modal-box">
-        <div class="modal-title">🔐 ADMIN ACCESS</div>
-        <div class="modal-sub">กรอกรหัสผ่านเพื่อเข้าสู่ระบบจัดการแอดออน</div>
-        <input type="password" class="modal-input" id="passInput" placeholder="กรอกรหัสผ่าน..." onkeyup="handleKey(event)">
-        <div class="modal-btn-group">
-            <button class="modal-btn-login" type="button" onclick="checkPassword()">เข้าสู่ระบบ</button>
-            <button class="modal-btn-close" type="button" onclick="closeLoginModal()">ยกเลิก</button>
-        </div>
+<div class="modal" id="loginModal">
+  <div class="mbox">
+    <h3>🔐 ADMIN ACCESS</h3>
+    <p>กรอกรหัสผ่านเพื่อเข้าสู่ระบบจัดการแอดออน</p>
+    <input type="password" id="passInput" placeholder="กรอกรหัสผ่าน...">
+    <div class="row">
+      <button class="btn btn-red" id="loginBtn" type="button" style="flex:2">เข้าสู่ระบบ</button>
+      <button class="btn btn-gray" id="closeLogin" type="button" style="flex:1">ยกเลิก</button>
     </div>
+  </div>
 </div>
 
-<div class="container" id="mainContainer">
-    <!-- Header -->
-    <div class="header">
-        <h1>ADDON<span>HUB</span></h1>
-        <p>ศูนย์รวมแอดออน Minecraft คุณภาพสูง</p>
-    </div>
-
-    <!-- Admin Form -->
-    <div class="admin-card" id="adminForm">
-        <div class="card-title">
-            <span id="formHeaderTitle">⚡ ADD NEW ADDON</span>
-            <button class="logout-btn" type="button" onclick="logoutAdmin()">LOGOUT</button>
-        </div>
-
-        <div class="form-group" style="background: #181b26; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-            <label style="color: var(--accent-red); font-weight: bold;">➕ เพิ่มหมวดหมู่ใหม่</label>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="newCatInput" placeholder="เช่น: เอาชีวิตรอด, ผี, อาวุธ">
-                <button type="button" onclick="addCategory()" style="background: #282c3c; color: #fff; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap;">เพิ่ม</button>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>ชื่อแอดออน</label>
-            <input type="text" id="addonTitle" placeholder="เช่น: CARRY MORE Add-On v1.0">
-        </div>
-        <div class="form-group">
-            <label>หมวดหมู่แอดออน</label>
-            <select id="addonCategory"></select>
-        </div>
-        <div class="form-group">
-            <label>ลิงก์รูปภาพตัวอย่าง (URL)</label>
-            <input type="url" id="addonImage" placeholder="https://...">
-        </div>
-        <div class="form-group">
-            <label>ลิงก์ดาวน์โหลดแอดออน (MediaFire / Google Drive)</label>
-            <input type="url" id="addonFile" placeholder="https://...">
-        </div>
-        
-        <div class="btn-group-submit">
-            <button class="btn-submit" id="submitBtn" type="button" onclick="handleSubmit()">POST ADDON</button>
-            <button class="btn-cancel-edit" id="cancelEditBtn" type="button" onclick="resetForm()">CANCEL</button>
-        </div>
-    </div>
-
-    <!-- Search Section -->
-    <div class="search-section">
-        <input type="text" class="search-input" id="searchInput" placeholder="🔍 ค้นหาชื่อแอดออน..." oninput="handleSearch()">
-    </div>
-
-    <!-- Category Filter Tabs -->
-    <div class="category-section">
-        <div class="category-tabs" id="categoryTabs">
-            <button class="cat-tab active" type="button" onclick="filterCategory('ALL')">ALL</button>
-        </div>
-    </div>
-
-    <!-- Addon List Grid -->
-    <div class="addon-grid" id="addonList">
-        <div class="empty-text">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div>
-    </div>
+<div class="nav">
+  <div class="wrap nav-in">
+    <div class="logo" id="logo">ADDON<span>HUB</span></div>
+    <button class="nav-btn" id="navSearch" type="button">🔍 ค้นหา</button>
+  </div>
 </div>
+
+<!-- ============ HOME ============ -->
+<div id="homeView">
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-tag">⚡ MINECRAFT ADDON COMMUNITY</div>
+      <h2>แจกแอดออน <em>Minecraft</em><br>ครบ จบ ในที่เดียว</h2>
+      <p>รวมแอดออนคุณภาพสูง ดาวน์โหลดฟรี อัปเดตใหม่ทุกวัน</p>
+      <button class="hero-search" id="heroSearch" type="button">
+        <span>🔍</span><span>ค้นหาแอดออนที่คุณต้องการ...</span><span class="go">ค้นหา</span>
+      </button>
+      <div class="stats">
+        <div class="stat"><b id="statAddons">0</b><small>แอดออนทั้งหมด</small></div>
+        <div class="stat"><b id="statCats">0</b><small>หมวดหมู่</small></div>
+      </div>
+    </div>
+
+    <!-- Admin panel -->
+    <div class="admin" id="adminPanel">
+      <div class="admin-head"><span>⚡ ADMIN PANEL</span><button class="logout" id="logoutBtn" type="button">LOGOUT</button></div>
+
+      <div class="box">
+        <h4>📁 จัดการหมวดหมู่</h4>
+        <div class="row">
+          <input type="text" id="newCat" placeholder="ชื่อหมวดหมู่ใหม่ เช่น: เอาชีวิตรอด">
+          <button class="btn btn-gray" id="addCatBtn" type="button">เพิ่ม</button>
+        </div>
+        <div class="catlist" id="catList"></div>
+      </div>
+
+      <div class="box">
+        <h4 id="formTitle">➕ เพิ่มแอดออนใหม่</h4>
+        <div class="fg"><label>ชื่อแอดออน</label><input type="text" id="fTitle" placeholder="เช่น: CARRY MORE Add-On v1.0"></div>
+        <div class="fg"><label>หมวดหมู่</label><select id="fCat"></select></div>
+        <div class="fg"><label>ลิงก์รูปภาพตัวอย่าง (URL)</label><input type="url" id="fImg" placeholder="https://..."></div>
+        <div class="fg"><label>ลิงก์ดาวน์โหลด (MediaFire / Google Drive)</label><input type="url" id="fFile" placeholder="https://..."></div>
+        <div class="row">
+          <button class="btn btn-red" id="submitBtn" type="button" style="flex:2">POST ADDON</button>
+          <button class="btn btn-cancel" id="cancelBtn" type="button" style="flex:1">CANCEL</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-head"><h3>หมวดหมู่</h3></div>
+    <div class="tabs" id="tabs"></div>
+
+    <div class="sec-head"><h3 id="listTitle">แอดออนล่าสุด</h3><small id="listCount"></small></div>
+    <div class="grid" id="homeGrid"><div class="empty">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div></div>
+  </div>
+</div>
+
+<!-- ============ SEARCH ============ -->
+<div id="searchView">
+  <div class="sbar">
+    <div class="wrap sbar-in">
+      <button class="back" id="backBtn" type="button">←</button>
+      <input class="sinput" id="sInput" type="text" placeholder="พิมพ์ชื่อแอดออน..." autocomplete="off">
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="sinfo" id="sInfo"></div>
+    <div class="grid" id="searchGrid"></div>
+  </div>
+</div>
+
+<footer>© ADDON HUB — Minecraft Addons Community</footer>
 
 <script>
-    const BIN_ID = '6ac65023ffd5d1605356252f';
-    const MASTER_KEY = '$2a$10$ecvjzzTvc7XkSLw9/7L2gukhIW/w4H.PRNViTUYJoDHgaMRT1Qo.q';
-    const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const BIN_ID='6ac65023ffd5d1605356252f';
+const MASTER_KEY='$2a$10$ecvjzzTvc7XkSLw9/7L2gukhIW/w4H.PRNViTUYJoDHgaMRT1Qo.q';
+const API_URL='https://api.jsonbin.io/v3/b/'+BIN_ID;
+const DEFAULT_CATS=['เอาชีวิตรอด','ผี','อาวุธ'];
 
-    let appData = {
-        categories: ['เอาชีวิตรอด', 'ผี', 'อาวุธ'],
-        addons: []
-    };
-    
-    let currentCategory = 'ALL';
-    let searchQuery = '';
-    let editingAddonId = null;
-    let isAdminLoggedIn = false;
+let appData={categories:DEFAULT_CATS.slice(),addons:[]};
+let currentCat='ALL', editingId=null, isAdmin=false, loaded=false;
+const $=id=>document.getElementById(id);
 
-    document.addEventListener("DOMContentLoaded", function() {
-        loadAddons();
-    });
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function safeUrl(u){return /^https?:\/\//i.test(u||'')?u:'#';}
 
-    function handleAdminButtonClick() {
-        if (isAdminLoggedIn) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            openLoginModal();
-        }
-    }
+/* ---------- Cloud ---------- */
+function loadAddons(){
+  fetch(API_URL+'/latest',{headers:{'X-Master-Key':MASTER_KEY,'X-Bin-Meta':'false'}})
+  .then(r=>r.json())
+  .then(d=>{
+    let rec=d&&d.record?d.record:d;
+    if(Array.isArray(rec)){appData.addons=rec;}
+    else if(rec&&typeof rec==='object'){appData.categories=rec.categories||DEFAULT_CATS.slice();appData.addons=rec.addons||[];}
+    loaded=true; renderAll();
+  })
+  .catch(e=>{
+    console.error(e);
+    $('homeGrid').innerHTML='<div class="empty">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ในขณะนี้</div>';
+  });
+}
+function sync(){
+  return fetch(API_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':MASTER_KEY},body:JSON.stringify(appData)})
+  .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+  .catch(e=>{console.error(e);alert('บันทึกข้อมูลไม่สำเร็จ กรุณาลองใหม่');});
+}
 
-    function openLoginModal() {
-        const modal = document.getElementById('adminLoginModal');
-        modal.classList.add('active');
-        const input = document.getElementById('passInput');
-        input.value = '';
-        input.focus();
-    }
+/* ---------- Navigation ---------- */
+let view='home';
+function route(){
+  const isSearch=view==='search';
+  $('homeView').style.display=isSearch?'none':'block';
+  $('searchView').style.display=isSearch?'block':'none';
+  window.scrollTo(0,0);
+  if(isSearch){renderSearch();setTimeout(()=>$('sInput').focus(),50);}
+}
+function goSearch(){
+  view='search';
+  try{history.pushState({v:'search'},'');}catch(e){}
+  route();
+}
+function goHome(){view='home';route();}
+function goBack(){
+  if(view==='search'){
+    let used=false;
+    try{ if(history.state&&history.state.v==='search'){history.back();used=true;} }catch(e){}
+    if(!used)goHome();
+  }
+}
 
-    function closeLoginModal() {
-        document.getElementById('adminLoginModal').classList.remove('active');
-    }
+/* ---------- Render ---------- */
+function cardHTML(a,isNew){
+  return '<div class="card">'
+   +'<div class="card-img"><img src="'+esc(safeUrl(a.image))+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.style.display=\'none\'">'
+   +'<span class="badge">'+esc(a.category)+'</span>'+(isNew?'<span class="new">NEW</span>':'')
+   +'<div class="ctrl"><button class="b-edit" type="button" data-act="edit" data-id="'+esc(a.id)+'">แก้ไข</button><button class="b-del" type="button" data-act="del" data-id="'+esc(a.id)+'">ลบ</button></div>'
+   +'</div>'
+   +'<div class="card-body"><div class="card-title">'+esc(a.title)+'</div>'
+   +'<a class="btn-dl" href="'+esc(safeUrl(a.file))+'" target="_blank" rel="noopener noreferrer">⬇ ดาวน์โหลด</a></div></div>';
+}
+function newestIds(){return appData.addons.slice(-3).map(a=>String(a.id));}
 
-    function handleKey(e) {
-        if (e.key === 'Enter') checkPassword();
-    }
+function renderTabs(){
+  const t=$('tabs'); t.innerHTML='';
+  function mk(label,val){
+    const b=document.createElement('button');b.type='button';
+    b.className='tab'+(currentCat===val?' active':'');b.textContent=label;
+    b.onclick=()=>{currentCat=val;renderTabs();renderHome();};
+    t.appendChild(b);
+  }
+  mk('ทั้งหมด','ALL');
+  appData.categories.forEach(c=>mk(c,c));
+}
+function renderSelect(){
+  const s=$('fCat'),keep=s.value;s.innerHTML='';
+  appData.categories.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;s.appendChild(o);});
+  if(keep&&appData.categories.indexOf(keep)!==-1)s.value=keep;
+}
+function renderCatManager(){
+  const box=$('catList');
+  if(!appData.categories.length){box.innerHTML='<div style="color:var(--sub);font-size:12px">ยังไม่มีหมวดหมู่</div>';return;}
+  box.innerHTML=appData.categories.map(c=>{
+    const n=appData.addons.filter(a=>a.category===c).length;
+    return '<div class="catrow"><span class="nm">'+esc(c)+'</span><span class="ct">'+n+' รายการ</span>'
+     +'<button class="c-ren" type="button" data-act="ren" data-cat="'+esc(c)+'">เปลี่ยนชื่อ</button>'
+     +'<button class="c-del" type="button" data-act="delcat" data-cat="'+esc(c)+'">ลบ</button></div>';
+  }).join('');
+}
+function renderHome(){
+  const nw=newestIds();
+  const items=appData.addons.filter(a=>currentCat==='ALL'||a.category===currentCat).slice().reverse();
+  $('listTitle').textContent=currentCat==='ALL'?'แอดออนล่าสุด':currentCat;
+  $('listCount').textContent=items.length+' รายการ';
+  $('homeGrid').innerHTML=items.length?items.map(a=>cardHTML(a,nw.indexOf(String(a.id))!==-1)).join(''):'<div class="empty">ยังไม่มีแอดออนในหมวดนี้</div>';
+}
+function renderSearch(){
+  const q=$('sInput').value.trim().toLowerCase();
+  const nw=newestIds();
+  const items=appData.addons.filter(a=>!q||String(a.title||'').toLowerCase().indexOf(q)!==-1).slice().reverse();
+  $('sInfo').textContent=q?('พบ '+items.length+' รายการสำหรับ "'+$('sInput').value.trim()+'"'):('แอดออนทั้งหมด '+items.length+' รายการ — พิมพ์ชื่อเพื่อค้นหา');
+  $('searchGrid').innerHTML=items.length?items.map(a=>cardHTML(a,nw.indexOf(String(a.id))!==-1)).join(''):'<div class="empty">ไม่พบแอดออนที่ค้นหา</div>';
+}
+function renderAll(){
+  $('statAddons').textContent=appData.addons.length;
+  $('statCats').textContent=appData.categories.length;
+  renderTabs();renderSelect();renderCatManager();renderHome();
+  if(view==='search')renderSearch();
+}
 
-    function checkPassword() {
-        const pass = document.getElementById('passInput').value;
-        if (pass === "elite.1190") {
-            isAdminLoggedIn = true;
-            closeLoginModal();
-            document.getElementById('adminForm').classList.add('active');
-            document.getElementById('mainContainer').classList.add('admin-mode');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            alert("รหัสผ่านไม่ถูกต้อง!");
-            document.getElementById('passInput').value = '';
-        }
-    }
+/* ---------- Admin login ---------- */
+function openLogin(){$('loginModal').classList.add('active');$('passInput').value='';$('passInput').focus();}
+function closeLogin(){$('loginModal').classList.remove('active');}
+function checkPass(){
+  if($('passInput').value==='elite.1190'){
+    isAdmin=true;closeLogin();
+    document.body.classList.add('admin');$('adminPanel').classList.add('active');
+    goHome();
+  }else{alert('รหัสผ่านไม่ถูกต้อง!');$('passInput').value='';}
+}
+function logout(){isAdmin=false;document.body.classList.remove('admin');$('adminPanel').classList.remove('active');resetForm();}
 
-    function logoutAdmin() {
-        isAdminLoggedIn = false;
-        document.getElementById('adminForm').classList.remove('active');
-        document.getElementById('mainContainer').classList.remove('admin-mode');
-        resetForm();
-    }
-
-    function loadAddons() {
-        fetch(API_URL + '/latest', {
-            method: 'GET',
-            headers: {
-                'X-Master-Key': MASTER_KEY,
-                'X-Bin-Meta': 'false'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            let recordData = data;
-            if (data && data.record) recordData = data.record;
-
-            if (Array.isArray(recordData)) {
-                appData.addons = recordData;
-            } else if (typeof recordData === 'object' && recordData !== null) {
-                appData.categories = recordData.categories || ['เอาชีวิตรอด', 'ผี', 'อาวุธ'];
-                appData.addons = recordData.addons || [];
-            }
-
-            renderCategories();
-            renderAddons();
-        })
-        .catch(err => {
-            console.error("Error loading addons:", err);
-            document.getElementById('addonList').innerHTML = '<div class="empty-text">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ในขณะนี้</div>';
-        });
-    }
-
-    function addCategory() {
-        const input = document.getElementById('newCatInput');
-        const catName = input.value.trim();
-        if (!catName) return;
-
-        if (!appData.categories.includes(catName)) {
-            appData.categories.push(catName);
-            input.value = '';
-            syncToCloud(appData);
-            renderCategories();
-            alert(`เพิ่มหมวดหมู่ "${catName}" เรียบร้อยแล้ว!`);
-        } else {
-            alert("มีหมวดหมู่นี้อยู่แล้ว!");
-        }
-    }
-
-    function renderCategories() {
-        const tabsWrap = document.getElementById('categoryTabs');
-        const selectWrap = document.getElementById('addonCategory');
-
-        tabsWrap.innerHTML = `<button class="cat-tab ${currentCategory === 'ALL' ? 'active' : ''}" type="button" onclick="filterCategory('ALL')">ALL</button>`;
-        selectWrap.innerHTML = '';
-
-        appData.categories.forEach(cat => {
-            tabsWrap.innerHTML += `<button class="cat-tab ${currentCategory === cat ? 'active' : ''}" type="button" onclick="filterCategory('${cat}')">${cat}</button>`;
-            selectWrap.innerHTML += `<option value="${cat}">${cat}</option>`;
+/* ---------- Categories ---------- */
+function addCat(){
+  const name=$('newCat').value.trim();if(!name)return;
+  if(appData.categories.indexOf(name)!==-1){alert('มีหมวดหมู่นี้อยู่แล้ว!');return;}
+  appData.categories.push(name);$('newCat').value='';sync();renderAll();
+}
+function renameCat(old){
+  const nn=(prompt('ตั้งชื่อหมวดหมู่ใหม่',old)||'').trim();
+  if(!nn||nn===old)return;
+  if(appData.categories.indexOf(nn)!==-1){alert('มีหมวดหมู่ชื่อนี้อยู่แล้ว!');return;}
+  appData.categories[appData.categories.indexOf(old)]=nn;
+  appData.addons.forEach(a=>{if(a.category===old)a.category=nn;});
+  if(currentC
