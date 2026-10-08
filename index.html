@@ -3,52 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADDON HUB</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>ADDON HUB - Minecraft Addons Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: #12141c;
+            --accent-red: #ff0055;
+            --accent-red-glow: rgba(255, 0, 85, 0.4);
+            --text-main: #ffffff;
+            --text-sub: #a0a5b5;
+            --border-color: #1f2330;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Kanit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #080808;
-            color: #ffffff;
-            padding: 20px 14px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            padding: 20px 12px;
+            background-image: radial-gradient(circle at 50% 0%, rgba(255, 0, 85, 0.08) 0%, transparent 70%);
         }
 
         .container {
             width: 100%;
-            max-width: 540px;
-            padding-bottom: 60px;
+            max-width: 580px;
+            padding-bottom: 90px;
+        }
+
+        /* Header Design */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
             position: relative;
         }
 
-        /* Header */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 14px;
-            border-bottom: 2px solid #1a1a1a;
-        }
-
         .header h1 {
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 800;
-            letter-spacing: 1px;
-            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .header h1 span {
-            color: #ff003c;
-            text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
+            color: var(--accent-red);
+            text-shadow: 0 0 15px var(--accent-red-glow);
+        }
+
+        .header p {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 4px;
         }
 
         /* Floating Admin Button */
@@ -56,40 +72,38 @@
             position: fixed;
             bottom: 24px;
             right: 20px;
-            background: #121212;
-            border: 2px solid #ff003c;
-            color: #ff003c;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-red);
+            color: var(--accent-red);
             font-size: 13px;
             font-weight: 800;
             cursor: pointer;
-            padding: 10px 18px;
-            border-radius: 30px;
-            box-shadow: 0 4px 20px rgba(255, 0, 60, 0.4);
-            z-index: 9999;
+            padding: 12px 22px;
+            border-radius: 50px;
+            box-shadow: 0 6px 20px var(--accent-red-glow);
+            z-index: 99999;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .floating-admin-btn:hover {
-            background: #ff003c;
+            background: var(--accent-red);
             color: #fff;
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(255, 0, 60, 0.6);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.6);
         }
 
-        /* Admin Login Modal */
+        /* Modal Popup */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            z-index: 10000;
+            backdrop-filter: blur(8px);
+            z-index: 100000;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -100,50 +114,44 @@
         }
 
         .modal-box {
-            background: #121212;
-            border: 1px solid #ff003c;
-            border-radius: 14px;
-            padding: 24px;
+            background: var(--card-bg);
+            border: 1px solid var(--accent-red);
+            border-radius: 16px;
+            padding: 28px 20px;
             width: 100%;
-            max-width: 380px;
-            box-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
+            max-width: 360px;
+            box-shadow: 0 0 40px var(--accent-red-glow);
             text-align: center;
-            animation: modalFadeIn 0.2s ease;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         .modal-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 800;
-            color: #ff003c;
+            color: var(--accent-red);
             margin-bottom: 6px;
         }
 
         .modal-sub {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 18px;
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 20px;
         }
 
         .modal-input {
             width: 100%;
-            padding: 12px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
+            padding: 12px 14px;
+            background: #181b26;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
             color: #fff;
             font-size: 14px;
             outline: none;
             text-align: center;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .modal-input:focus {
-            border-color: #ff003c;
+            border-color: var(--accent-red);
         }
 
         .modal-btn-group {
@@ -153,37 +161,35 @@
 
         .modal-btn-login {
             flex: 2;
-            background: #ff003c;
+            background: var(--accent-red);
             color: #fff;
             border: none;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 800;
-            font-size: 13px;
             cursor: pointer;
         }
 
         .modal-btn-close {
             flex: 1;
-            background: #222;
-            color: #aaa;
-            border: 1px solid #333;
+            background: #1f2330;
+            color: var(--text-sub);
+            border: none;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 700;
-            font-size: 13px;
             cursor: pointer;
         }
 
-        /* Admin Management Form Card */
+        /* Admin Form Card */
         .admin-card {
             display: none;
-            background: #121212;
-            border: 1px solid #ff003c;
-            border-radius: 12px;
-            padding: 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--accent-red);
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 24px;
-            box-shadow: 0 4px 25px rgba(255, 0, 60, 0.2);
+            box-shadow: 0 4px 30px var(--accent-red-glow);
         }
 
         .admin-card.active {
@@ -191,55 +197,56 @@
         }
 
         .card-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 800;
-            margin-bottom: 14px;
-            color: #ff003c;
+            margin-bottom: 16px;
+            color: var(--accent-red);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         label {
             display: block;
             margin-bottom: 6px;
-            color: #aaa;
+            color: var(--text-sub);
             font-size: 12px;
+            font-weight: 600;
         }
 
         input[type="text"], input[type="url"], select {
             width: 100%;
-            padding: 11px;
-            background: #181818;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
+            padding: 12px;
+            background: #181b26;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
             color: #fff;
             font-size: 13px;
             outline: none;
         }
 
         input:focus, select:focus {
-            border-color: #ff003c;
+            border-color: var(--accent-red);
         }
 
         .btn-group-submit {
             display: flex;
             gap: 10px;
-            margin-top: 14px;
+            margin-top: 16px;
         }
 
         .btn-submit {
             flex: 2;
             padding: 12px;
-            background: #ff003c;
+            background: var(--accent-red);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 13px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 800;
             cursor: pointer;
         }
@@ -247,10 +254,10 @@
         .btn-cancel-edit {
             flex: 1;
             padding: 12px;
-            background: #222;
-            color: #aaa;
-            border: 1px solid #333;
-            border-radius: 8px;
+            background: #1f2330;
+            color: var(--text-sub);
+            border: none;
+            border-radius: 10px;
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
@@ -259,88 +266,100 @@
 
         .logout-btn {
             background: transparent;
-            color: #888;
-            border: 1px solid #333;
+            color: var(--text-sub);
+            border: 1px solid var(--border-color);
             padding: 4px 10px;
             border-radius: 6px;
             font-size: 11px;
             cursor: pointer;
         }
 
-        /* Search Bar System */
+        /* Search Section */
         .search-section {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .search-input {
             width: 100%;
-            padding: 12px 14px;
-            background: #121212;
-            border: 1px solid #222;
-            border-radius: 10px;
+            padding: 14px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
             color: #fff;
-            font-size: 13px;
+            font-size: 14px;
             outline: none;
             transition: all 0.2s ease;
         }
 
         .search-input:focus {
-            border-color: #ff003c;
-            box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 15px var(--accent-red-glow);
         }
 
-        /* Category Filter Tabs System */
+        /* Category Filter Tabs */
         .category-section {
-            margin-bottom: 18px;
+            margin-bottom: 22px;
         }
 
         .category-tabs {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             scrollbar-width: none;
         }
 
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
         .cat-tab {
-            background: #121212;
-            border: 1px solid #222;
-            color: #888;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-sub);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
             white-space: nowrap;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
         .cat-tab.active {
-            background: rgba(255, 0, 60, 0.15);
-            border-color: #ff003c;
-            color: #ff003c;
+            background: rgba(255, 0, 85, 0.15);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+            box-shadow: 0 0 12px var(--accent-red-glow);
         }
 
-        /* Addon Grid Layout */
+        /* Addon List Grid */
         .addon-grid {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 20px;
         }
 
         .addon-card {
-            background: #121212;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .addon-card:hover {
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
         }
 
         .addon-img-wrapper {
             width: 100%;
             aspect-ratio: 16 / 9;
-            background: #181818;
+            background: #181b26;
             overflow: hidden;
+            position: relative;
         }
 
         .addon-img {
@@ -348,26 +367,31 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .addon-card:hover .addon-img {
+            transform: scale(1.03);
         }
 
         .addon-content {
-            padding: 16px;
+            padding: 18px;
         }
 
         .addon-category-tag {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 800;
-            color: #ff003c;
+            color: var(--accent-red);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
         }
 
         .addon-title {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 800;
             color: #ffffff;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             line-height: 1.4;
         }
 
@@ -377,40 +401,41 @@
             align-items: center;
             width: 100%;
             padding: 12px;
-            background: #181818;
-            color: #ff003c;
-            border: 1px solid #ff003c;
+            background: rgba(255, 0, 85, 0.1);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
             text-align: center;
             text-decoration: none;
             font-weight: 800;
             font-size: 13px;
-            border-radius: 8px;
-            transition: 0.2s;
+            border-radius: 10px;
+            transition: all 0.2s ease;
         }
 
         .btn-download:hover {
-            background: #ff003c;
+            background: var(--accent-red);
             color: #ffffff;
+            box-shadow: 0 4px 20px var(--accent-red-glow);
         }
 
         .empty-text {
             text-align: center;
-            color: #666;
-            padding: 50px 20px;
-            font-size: 13px;
-            background: #121212;
-            border-radius: 12px;
-            border: 1px dashed #222;
+            color: var(--text-sub);
+            padding: 60px 20px;
+            font-size: 14px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px dashed var(--border-color);
         }
 
-        /* Admin Controls */
+        /* Admin Action Buttons */
         .admin-controls {
             display: none;
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 12px;
+            right: 12px;
             gap: 6px;
-            z-index: 5;
+            z-index: 10;
         }
 
         .admin-mode .admin-controls {
@@ -418,7 +443,7 @@
         }
 
         .edit-btn {
-            background: rgba(255, 170, 0, 0.95);
+            background: rgba(255, 170, 0, 0.9);
             color: #000;
             border: none;
             padding: 6px 12px;
@@ -429,7 +454,7 @@
         }
 
         .delete-btn {
-            background: rgba(255, 0, 60, 0.95);
+            background: rgba(255, 0, 85, 0.9);
             color: #fff;
             border: none;
             padding: 6px 12px;
@@ -447,7 +472,7 @@
     ⚡ ADMIN
 </button>
 
-<!-- UI Modal ล็อกอินแอดมิน -->
+<!-- UI Modal Log in -->
 <div class="modal-overlay" id="adminLoginModal">
     <div class="modal-box">
         <div class="modal-title">🔐 ADMIN ACCESS</div>
@@ -464,26 +489,27 @@
     <!-- Header -->
     <div class="header">
         <h1>ADDON<span>HUB</span></h1>
+        <p>ศูนย์รวมแอดออน Minecraft คุณภาพสูง</p>
     </div>
 
-    <!-- Admin Management Panel -->
+    <!-- Admin Form -->
     <div class="admin-card" id="adminForm">
         <div class="card-title">
             <span id="formHeaderTitle">⚡ ADD NEW ADDON</span>
             <button class="logout-btn" type="button" onclick="logoutAdmin()">LOGOUT</button>
         </div>
 
-        <div class="form-group" style="background: #181818; padding: 10px; border-radius: 8px; border: 1px solid #2a2a2a; margin-bottom: 14px;">
-            <label style="color: #ff003c; font-weight: bold;">➕ เพิ่มหมวดหมู่ใหม่</label>
+        <div class="form-group" style="background: #181b26; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 16px;">
+            <label style="color: var(--accent-red); font-weight: bold;">➕ เพิ่มหมวดหมู่ใหม่</label>
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="newCatInput" placeholder="เช่น: เอาชีวิตรอด, ผี, อาวุธ">
-                <button type="button" onclick="addCategory()" style="background: #333; color: #fff; border: none; padding: 0 14px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap;">เพิ่ม</button>
+                <button type="button" onclick="addCategory()" style="background: #282c3c; color: #fff; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap;">เพิ่ม</button>
             </div>
         </div>
 
         <div class="form-group">
             <label>ชื่อแอดออน</label>
-            <input type="text" id="addonTitle" placeholder="เช่น: CARRY MORE Add-On v1.0" required>
+            <input type="text" id="addonTitle" placeholder="เช่น: CARRY MORE Add-On v1.0">
         </div>
         <div class="form-group">
             <label>หมวดหมู่แอดออน</label>
@@ -491,11 +517,11 @@
         </div>
         <div class="form-group">
             <label>ลิงก์รูปภาพตัวอย่าง (URL)</label>
-            <input type="url" id="addonImage" placeholder="https://..." required>
+            <input type="url" id="addonImage" placeholder="https://...">
         </div>
         <div class="form-group">
             <label>ลิงก์ดาวน์โหลดแอดออน (MediaFire / Google Drive)</label>
-            <input type="url" id="addonFile" placeholder="https://..." required>
+            <input type="url" id="addonFile" placeholder="https://...">
         </div>
         
         <div class="btn-group-submit">
@@ -504,19 +530,19 @@
         </div>
     </div>
 
-    <!-- Search Bar Section -->
+    <!-- Search Section -->
     <div class="search-section">
         <input type="text" class="search-input" id="searchInput" placeholder="🔍 ค้นหาชื่อแอดออน..." oninput="handleSearch()">
     </div>
 
-    <!-- Category Tabs Filter -->
+    <!-- Category Filter Tabs -->
     <div class="category-section">
         <div class="category-tabs" id="categoryTabs">
             <button class="cat-tab active" type="button" onclick="filterCategory('ALL')">ALL</button>
         </div>
     </div>
 
-    <!-- Addon List -->
+    <!-- Addon List Grid -->
     <div class="addon-grid" id="addonList">
         <div class="empty-text">กำลังโหลดแอดออนจากเซิร์ฟเวอร์...</div>
     </div>
@@ -537,9 +563,9 @@
     let editingAddonId = null;
     let isAdminLoggedIn = false;
 
-    window.onload = function() {
+    document.addEventListener("DOMContentLoaded", function() {
         loadAddons();
-    };
+    });
 
     function handleAdminButtonClick() {
         if (isAdminLoggedIn) {
@@ -550,9 +576,11 @@
     }
 
     function openLoginModal() {
-        document.getElementById('adminLoginModal').classList.add('active');
-        document.getElementById('passInput').value = '';
-        document.getElementById('passInput').focus();
+        const modal = document.getElementById('adminLoginModal');
+        modal.classList.add('active');
+        const input = document.getElementById('passInput');
+        input.value = '';
+        input.focus();
     }
 
     function closeLoginModal() {
@@ -594,20 +622,15 @@
         })
         .then(res => res.json())
         .then(data => {
-            if (Array.isArray(data)) {
-                appData.addons = data;
-            } else if (data && data.record) {
-                if (Array.isArray(data.record)) {
-                    appData.addons = data.record;
-                } else {
-                    appData = data.record;
-                }
-            } else if (data && data.addons) {
-                appData = data;
-            }
+            let recordData = data;
+            if (data && data.record) recordData = data.record;
 
-            if (!appData.categories) appData.categories = ['เอาชีวิตรอด', 'ผี', 'อาวุธ'];
-            if (!appData.addons) appData.addons = [];
+            if (Array.isArray(recordData)) {
+                appData.addons = recordData;
+            } else if (typeof recordData === 'object' && recordData !== null) {
+                appData.categories = recordData.categories || ['เอาชีวิตรอด', 'ผี', 'อาวุธ'];
+                appData.addons = recordData.addons || [];
+            }
 
             renderCategories();
             renderAddons();
@@ -644,51 +667,3 @@
         appData.categories.forEach(cat => {
             tabsWrap.innerHTML += `<button class="cat-tab ${currentCategory === cat ? 'active' : ''}" type="button" onclick="filterCategory('${cat}')">${cat}</button>`;
             selectWrap.innerHTML += `<option value="${cat}">${cat}</option>`;
-        });
-    }
-
-    function filterCategory(cat) {
-        currentCategory = cat;
-        renderCategories();
-        renderAddons();
-    }
-
-    function handleSearch() {
-        searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-        renderAddons();
-    }
-
-    function handleSubmit() {
-        if (editingAddonId !== null) {
-            updateAddon();
-        } else {
-            uploadAddon();
-        }
-    }
-
-    async function uploadAddon() {
-        const title = document.getElementById('addonTitle').value.trim();
-        const category = document.getElementById('addonCategory').value;
-        const imgUrl = document.getElementById('addonImage').value.trim();
-        const fileUrl = document.getElementById('addonFile').value.trim();
-        const submitBtn = document.getElementById('submitBtn');
-
-        if (!title || !imgUrl || !fileUrl) {
-            alert("กรุณากรอกข้อมูลให้ครบทุกช่อง!");
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "UPLOADING...";
-
-        const newAddon = {
-            id: Date.now(),
-            title: title,
-            category: category,
-            image: imgUrl,
-            downloadUrl: fileUrl
-        };
-
-        appData.addons.unshift(newAddon);
-
-        if (awa
